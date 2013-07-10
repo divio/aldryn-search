@@ -1,0 +1,4 @@
+include metadata.py
+include README.rst
+include LICENSE
+recursive-include docs *
