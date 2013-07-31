@@ -74,7 +74,7 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
                     text += _strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
             text += obj.page.get_meta_description() or u''
             text += u' '
-            text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') else u''
+            text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') and obj.page.get_meta_keywords() else u''
             self.prepared_data['text'] = text
             self.prepared_data['language'] = current_language
             return self.prepared_data
