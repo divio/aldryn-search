@@ -55,13 +55,13 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
             return obj.page.get_absolute_url()
 
     def prepare(self, obj):
-        current_languge = obj.language
-        with override(current_languge):
+        current_language = obj.language
+        with override(current_language):
             request = rf.get("/")
             request.session = {}
-            request.LANGUAGE_CODE = current_languge
+            request.LANGUAGE_CODE = current_language
             self.prepared_data = super(TitleIndex, self).prepare(obj)
-            plugins = CMSPlugin.objects.filter(language=current_languge, placeholder__in=obj.page.placeholders.all())
+            plugins = CMSPlugin.objects.filter(language=current_language, placeholder__in=obj.page.placeholders.all())
             text = u''
             for base_plugin in plugins:
                 instance, plugin_type = base_plugin.get_plugin_instance()
@@ -74,9 +74,9 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
                     text += _strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
             text += obj.page.get_meta_description() or u''
             text += u' '
-            text += obj.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') else u''
+            text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') else u''
             self.prepared_data['text'] = text
-            self.prepared_data['language'] = current_languge
+            self.prepared_data['language'] = current_language
             return self.prepared_data
 
     def get_model(self):
