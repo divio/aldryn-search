@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-06 19:44+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cms_app.py:13
+msgid "aldryn search"
+msgstr "Aldryn Suche"
+
+#: templates/aldryn_search/search.html:18
+msgid "results"
+msgstr "Resultate"
+
+#: templates/aldryn_search/inc/pagination.html:6
+#, python-format
+msgid "%(from)s – %(until)s of %(count)s %(obj_string)s are displayed"
+msgstr "%(from)s – %(until)s von %(count)s %(obj_string)s werden angezeigt"
+
+#: templates/aldryn_search/inc/pagination.html:25
+#, python-format
+msgid "Displaying all %(count)s %(obj_string)s"
+msgstr "Alle %(count)s %(obj_string)s werden angezeigt"
+
+#: templates/aldryn_search/inc/pagination.html:27
+#, python-format
+msgid "Displaying all %(count)s objects"
+msgstr "Alle %(count)s Objekte werden angezeigt"

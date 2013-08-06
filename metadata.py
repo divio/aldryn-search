@@ -1,5 +1,5 @@
-package_name = 'djangocms_search'
-name = 'djangocms-search'
+package_name = 'aldryn_search'
+name = 'aldryn-search'
 author = 'Benjamin Wohlwend'
 author_email = 'piquadrat@gmail.com'
 description = "An extension to django CMS to provide multilingual Haystack indexes"

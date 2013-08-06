@@ -32,17 +32,17 @@ def _strip_tags(value):
 
 
 def _get_index_base():
-    index_string = settings.DJANGOCMS_SEARCH_INDEX_BASE_CLASS
+    index_string = settings.ALDRYN_SEARCH_INDEX_BASE_CLASS
     module, class_name = index_string.rsplit('.', 1)
     mod = importlib.import_module(module)
     base_class = getattr(mod, class_name, None)
     if not base_class:
-        raise ImproperlyConfigured('DJANGOCMS_SEARCH_INDEX_BASE_CLASS: module %s has no class %s' % (module, class_name))
+        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: module %s has no class %s' % (module, class_name))
     if not issubclass(base_class, indexes.SearchIndex):
-        raise ImproperlyConfigured('DJANGOCMS_SEARCH_INDEX_BASE_CLASS: %s is not a subclass of haystack.indexes.SearchIndex' % index_string)
+        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s is not a subclass of haystack.indexes.SearchIndex' % index_string)
     required_fields = ['text', 'language']
     if not all(field in base_class.fields for field in required_fields):
-        raise ImproperlyConfigured('DJANGOCMS_SEARCH_INDEX_BASE_CLASS: %s must contain at least these fields: %s' % (index_string, required_fields))
+        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s must contain at least these fields: %s' % (index_string, required_fields))
     return base_class
 
 rf = RequestFactory()
@@ -53,6 +53,21 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
     def prepare_url(self, obj):
         with override(obj.language):
             return obj.page.get_absolute_url()
+
+    def prepare_description(self, obj):
+        return obj.meta_description or None
+
+    def prepare_pub_date(self, obj):
+        return obj.page.publication_date
+
+    def prepare_login_required(self, obj):
+        return obj.page.login_required
+
+    def prepare_title(self, obj):
+        return obj.title
+
+    def prepare_site_id(self, obj):
+        return obj.page.site_id
 
     def prepare(self, obj):
         current_language = obj.language

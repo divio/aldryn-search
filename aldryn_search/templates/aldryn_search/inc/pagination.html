@@ -1,0 +1,31 @@
+{% load i18n spurl %}
+<p class="pagenav clearfix">
+	{% if page_obj.has_other_pages %}
+		<span class="left status">
+			{% with from=page_obj.start_index until=page_obj.end_index count=page_obj.paginator.count %}
+				{% blocktrans %}{{ from }} – {{ until }} of {{ count }} {{ obj_string }} are displayed{% endblocktrans %}
+			{% endwith %}
+		</span>
+		<span class="right">
+			{% for page_num in page_obj.page_range %}
+				{% if page_num %}
+					{% if page_obj.number == page_num %}
+						<a href="" class="active"><span>{{ page_num }}</span></a>
+					{% else %}
+						<a href="{% spurl base='' query=request.GET set_query='page={{ page_num }}' %}"><span>{{ page_num }}</span></a>
+					{% endif %}
+				{% else %}
+					…
+				{% endif %}
+			{% endfor %}
+		</span>
+	{% else %}
+		<span class="left status">
+			{% if obj_string %}
+				{% blocktrans with page_obj.paginator.count as count %}Displaying all {{ count }} {{ obj_string }}{% endblocktrans %}
+			{% else %}
+				{% blocktrans with page_obj.paginator.count as count %}Displaying all {{ count }} objects{% endblocktrans %}
+			{% endif %}
+		</span>
+	{% endif %}
+</p>

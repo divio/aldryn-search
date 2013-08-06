@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# djangocms-search documentation build configuration file, created by
+# aldryn-search documentation build configuration file, created by
 # sphinx-quickstart on Thu Mar 31 22:33:26 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -38,7 +38,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'djangocms-search'
+project = u'aldryn-search'
 copyright = u'2013, Divio AG'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -159,7 +159,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'djangocms-searchdoc'
+htmlhelp_basename = 'aldryn-searchdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -173,7 +173,7 @@ htmlhelp_basename = 'djangocms-searchdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'djangocms-search.tex', u'djangocms-search Documentation',
+  ('index', 'aldryn-search.tex', u'aldryn-search Documentation',
    u'Divio AG', 'manual'),
 ]
 

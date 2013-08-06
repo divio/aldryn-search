@@ -15,8 +15,8 @@ Requirements
 Usage
 =====
 
-After installing djangocms-search through your package manager of choice, add
-:mod:`djangocms_search` to your :setting:`INSTALLED_APPS`.
+After installing aldryn-search through your package manager of choice, add
+:mod:`aldryn_search` to your :setting:`INSTALLED_APPS`.
 
 Multilingual Setup
 ------------------
@@ -49,10 +49,10 @@ An example of such a setup could look like this::
     the defined language backends seems sensible in this case.
 
 To make sure that the correct language is used when searching, add
-:class:`djangocms_search.router.LanguageRouter` to your
+:class:`aldryn_search.router.LanguageRouter` to your
 :setting:`HAYSTACK_ROUTERS` setting::
 
-    HAYSTACK_ROUTERS = ['djangocms_search.router.LanguageRouter',]
+    HAYSTACK_ROUTERS = ['aldryn_search.router.LanguageRouter',]
 
 
 If you want to index your own multilingual content, just make sure that  your
@@ -84,11 +84,11 @@ subclasses:
 
 Settings
 ========
-.. setting: DJANGOCMS_SEARCH_INDEX_BASE_CLASS
+.. setting: ALDRYN_SEARCH_INDEX_BASE_CLASS
 
-DJANGOCMS_SEARCH_INDEX_BASE_CLASS
+ALDRYN_SEARCH_INDEX_BASE_CLASS
 ---------------------------------
-Default: :class:`djangocms_search.base.TitleIndexBase`
+Default: :class:`aldryn_search.base.TitleIndexBase`
 
 This setting can be used to add custom fields to the search index if the
 included fields do not suffice. Make sure to provide the full path
