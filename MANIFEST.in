@@ -1,4 +1,7 @@
 include metadata.py
 include README.rst
 include LICENSE
+recursive-include aldryn_search/templates *
+recursive-include aldryn_search/locale *
 recursive-include docs *
+recursive-exclude * *.pyc

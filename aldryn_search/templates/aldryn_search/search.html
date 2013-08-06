@@ -1,8 +1,9 @@
 {% extends 'fullwidth.html' %}
 {% load standard_form highlight %}
 {% block content %}
-	<form action="." method="get">
-	{% standard_form form %}
+	<form action="." method="get" class="frm">
+		{% standard_widget form.q options custom_class='input-large' placeholder=_('enter your search term') %}
+		{% standard_submit %}
 	</form>
 	<ul class="search-result-list">
 		{% for result in page_obj.object_list %}

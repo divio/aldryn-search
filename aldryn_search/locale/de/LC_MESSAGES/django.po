@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-06 19:44+0200\n"
+"POT-Creation-Date: 2013-08-06 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,9 +21,13 @@ msgstr ""
 msgid "aldryn search"
 msgstr "Aldryn Suche"
 
-#: templates/aldryn_search/search.html:18
+#: templates/aldryn_search/search.html:5
+msgid "enter your search term"
+msgstr "Suchbegriffe eingeben"
+
+#: templates/aldryn_search/search.html:19
 msgid "results"
-msgstr "Resultate"
+msgstr "Resultaten"
 
 #: templates/aldryn_search/inc/pagination.html:6
 #, python-format
