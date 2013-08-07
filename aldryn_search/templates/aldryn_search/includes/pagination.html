@@ -7,8 +7,8 @@
 	<p>{% blocktrans %}{{ from }} – {{ until }} of {{ count }} {{ obj_string }} are displayed{% endblocktrans %}</p>
 	{% endwith %}
 	<ul>
-		{% if true %}
-		<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.next }}' %}">&laquo; {% trans "previous" %}</a></li>
+		{% if page_obj.has_previous %}
+		<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.previous_page_number }}' %}">&laquo; {% trans "previous" %}</a></li>
 		{% endif %}
 		{% for page_num in page_obj.page_range %}
 		{% if page_num %}
@@ -21,7 +21,9 @@
 		<li class="jumper"><span>...</span></li>
 		{% endif %}
 		{% endfor %}
-		<li class="next"><a href="#">{% trans "next" %} &raquo;</a></li>
+		{% if page_obj.has_next %}
+		<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.next_page_number }}' %}">{% trans "next" %} &raquo;</a></li>
+		{% endif %}
 	</ul>
 </div>
 {% endif %}
