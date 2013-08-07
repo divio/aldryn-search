@@ -1,0 +1,27 @@
+{% load i18n spurl %}
+
+{% if page_obj.has_other_pages %}
+
+<div class="pagenav">
+	{% with from=page_obj.start_index until=page_obj.end_index count=page_obj.paginator.count %}
+	<p>{% blocktrans %}{{ from }} – {{ until }} of {{ count }} {{ obj_string }} are displayed{% endblocktrans %}</p>
+	{% endwith %}
+	<ul>
+		{% if true %}
+		<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.next }}' %}">&laquo; {% trans "previous" %}</a></li>
+		{% endif %}
+		{% for page_num in page_obj.page_range %}
+		{% if page_num %}
+		{% if page_obj.number == page_num %}
+		<li class="page active"><span>{{ page_num }}</span></li>
+		{% else %}
+		<li class="page"><a href="{% spurl base='' query=request.GET set_query='page={{ page_num }}' %}">{{ page_num }}</a></li>
+		{% endif %}
+		{% else %}
+		<li class="jumper"><span>...</span></li>
+		{% endif %}
+		{% endfor %}
+		<li class="next"><a href="#">{% trans "next" %} &raquo;</a></li>
+	</ul>
+</div>
+{% endif %}

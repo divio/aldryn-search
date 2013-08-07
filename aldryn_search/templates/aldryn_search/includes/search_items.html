@@ -1,0 +1,13 @@
+{% load i18n highlight %}
+
+{% for result in page_obj.object_list %}
+<li>
+	<h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
+	{% if result.text %}
+	<p>{% highlight result.text with request.GET.q %}</p>
+	{% endif %}
+	<p><a href="{{ result.url }}">{{ result.url }}</a></p>
+</li>
+{% empty %}
+<li>{% trans "No results found for" %} "{{ request.GET.q }}"</li>
+{% endfor %}

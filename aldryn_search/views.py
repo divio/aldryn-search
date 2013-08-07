@@ -10,7 +10,7 @@ from .contrib.pagination import DiggPaginator
 
 
 class AldrynSearchView(FormMixin, ListView):
-    template_name = 'aldryn_search/search.html'
+    template_name = 'aldryn_search/search_results.html'
     queryset = EmptySearchQuerySet()
     form_class = ModelSearchForm
     load_all = False
