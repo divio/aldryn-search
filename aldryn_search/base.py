@@ -9,6 +9,10 @@ from haystack.constants import DEFAULT_ALIAS
 from cms.utils.i18n import get_current_language
 
 from .conf import settings
+from .utils import _get_language_from_alias_func
+
+
+LANGUAGE_FROM_ALIAS = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
 
 
 class AldrynIndexBase(indexes.SearchIndex):
@@ -63,19 +67,39 @@ class AldrynIndexBase(indexes.SearchIndex):
             return self.prepared_data
 
     def get_current_language(self, using=None, obj=None):
+        """
+        Helper method bound to ALWAYS return a language.
+
+        When obj is not None, this calls self.get_language to try and get a language from obj,
+        this is useful when the object itself defines it's language in a "language" field.
+
+        If no language was found or obj is None, then we call self.get_default_language to try and get a fallback language.
+        """
         language = self.get_language(obj) if obj else None
         return language or self.get_default_language(using)
 
     def get_language(self, obj):
+        """
+        Equivalent to self.prepare_language.
+        """
         return None
 
     def get_url(self, obj):
+        """
+        Equivalent to self.prepare_url.
+        """
         return obj.get_absolute_url()
 
     def get_title(self, obj):
+        """
+        Equivalent to self.prepare_title.
+        """
         return None
 
     def get_description(self, obj):
+        """
+        Equivalent to self.prepare_description.
+        """
         return None
 
     def get_default_language(self, using):
@@ -83,10 +107,9 @@ class AldrynIndexBase(indexes.SearchIndex):
         When using multiple languages, this allows us to specify a fallback based on the
         backend being used.
         """
-        func = settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS
 
-        if using and not using == DEFAULT_ALIAS and func:
-            return func(using)
+        if using and not using == DEFAULT_ALIAS and LANGUAGE_FROM_ALIAS:
+            return LANGUAGE_FROM_ALIAS(using)
         else:
             return get_current_language() or settings.LANGUAGE_CODE
 
@@ -100,4 +123,8 @@ class AldrynIndexBase(indexes.SearchIndex):
         raise NotImplementedError()
 
     def get_search_data(self, obj, language, request):
+        """
+        Returns a string that will be used to populate the text field (primary field).
+        """
         raise NotImplementedError()
+

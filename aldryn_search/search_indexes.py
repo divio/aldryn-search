@@ -1,11 +1,9 @@
 from distutils.version import LooseVersion
 
-from django.core.exceptions import ImproperlyConfigured
 from django.contrib.sites.models import Site
 from django.db.models import Q
 from django.db.models.query import EmptyQuerySet
 from django.template import RequestContext
-from django.utils import importlib
 from django.utils.encoding import force_unicode
 from django.utils import timezone
 
@@ -16,26 +14,11 @@ from haystack import indexes
 
 from .models import TitleProxy
 from .conf import settings
-from .utils import strip_tags
+from .utils import _get_index_base, strip_tags
 
 
 # Backwards compatibility
 _strip_tags = strip_tags
-
-
-def _get_index_base():
-    index_string = settings.ALDRYN_SEARCH_INDEX_BASE_CLASS
-    module, class_name = index_string.rsplit('.', 1)
-    mod = importlib.import_module(module)
-    base_class = getattr(mod, class_name, None)
-    if not base_class:
-        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: module %s has no class %s' % (module, class_name))
-    if not issubclass(base_class, indexes.SearchIndex):
-        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s is not a subclass of haystack.indexes.SearchIndex' % index_string)
-    required_fields = ['text', 'language']
-    if not all(field in base_class.fields for field in required_fields):
-        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s must contain at least these fields: %s' % (index_string, required_fields))
-    return base_class
 
 
 class TitleIndex(_get_index_base(), indexes.Indexable):

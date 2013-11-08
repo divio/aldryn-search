@@ -34,6 +34,31 @@ To make sure the correct backend is used during search, add ``aldryn_search.rout
     HAYSTACK_ROUTERS = ['aldryn_search.router.LanguageRouter',]
 
 
+
+When using multiple languages, usually there's one search backend per language, when indexing it's important to know
+which language is currently being used, this can be facilitated by the ``ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS`` setting,
+this setting could be a callable or a string path that resolves to one.
+
+Please keep in mind that it's usually not a good idea to import things in your settings, however there are cases where
+it seems overkill to create a function to handle the alias, for example::
+
+    ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS = lambda alias: alias.split('-')[-1]
+
+
+the example above could be used when using multiple languages and sites, all backends could have a language suffix.
+
+The same could be achieved using a function defined somewhere else in your code like so::
+
+    ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS = "my_app.helpers.language_from_alias"
+
+
+
+If any of the above return None then ``settings.LANGUAGE_CODE`` will be used.
+
+By default this setting evaluates to a function that checks if the alias is in ``settings.LANGUAGES`` and if so it
+uses the alias as a language.
+
+
 For a complete Haystack setup, please refer to their `documentation <http://docs.haystacksearch.org/dev/>`_.
 
 For more docs, see the ``docs`` folder or the
