@@ -48,18 +48,23 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
         plugins = CMSPlugin.objects.filter(language=language, placeholder__in=obj.page.placeholders.all())
         text = u''
         for base_plugin in plugins:
-            instance, plugin_type = base_plugin.get_plugin_instance()
-            if instance is None:
-                # this is an empty plugin
-                continue
-            if hasattr(instance, 'search_fields'):
-                text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
-            if getattr(instance, 'search_fulltext', False) or getattr(plugin_type, 'search_fulltext', False):
-                text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
-            text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
+            text += self.get_text_for_plugin(base_plugin, request)
         text += obj.page.get_meta_description() or u''
         text += u' '
         text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') and obj.page.get_meta_keywords() else u''
+        return text
+
+    def get_text_for_plugin(self, base_plugin, request):
+        text = u''
+        instance, plugin_type = base_plugin.get_plugin_instance()
+        if instance is None:
+            # this is an empty plugin
+            return text
+        if hasattr(instance, 'search_fields'):
+            text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
+        if getattr(instance, 'search_fulltext', True) and \
+                getattr(plugin_type, 'search_fulltext', True):
+            text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
         return text
 
     def get_model(self):
