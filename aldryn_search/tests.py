@@ -40,6 +40,7 @@ class FakeTemplateLoader(object):
     CMS_TEMPLATES=(("whee.html", "Whee Template"),),
     LANGUAGES=(('en', 'English'),),
     TEMPLATE_LOADERS=('aldryn_search.tests.FakeTemplateLoader',),
+    HAYSTACK_SIGNAL_PROCESSOR='haystack.signals.BaseSignalProcessor',
     )
 class PluginIndexingTests(TestCase):
 
@@ -72,7 +73,8 @@ class PluginIndexingTests(TestCase):
         finally:
             del NotIndexedPlugin.search_fulltext
 
-    def test_page_title_is_indexed(self):
+    def test_page_title_is_indexed_using_prepare(self):
+        """This tests the indexing path way used by update_index mgmt command"""
         from cms.api import create_page
         page = create_page(title="Whoopee", template="whee.html", language="en")
 
@@ -81,12 +83,31 @@ class PluginIndexingTests(TestCase):
         search_conn = connections[DEFAULT_ALIAS]
         unified_index = search_conn.get_unified_index()
 
-        from aldryn_search.models import TitleProxy
+        from .models import TitleProxy
         index = unified_index.get_index(TitleProxy)
 
-        proxy = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
+        title = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
-        indexed = index.prepare(proxy)
+        indexed = index.prepare(title)
+        self.assertEqual('Whoopee', indexed['title'])
+        self.assertEqual('Whoopee', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        from cms.api import create_page
+        page = create_page(title="Whoopee", template="whee.html", language="en")
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from .models import TitleProxy
+        index = unified_index.get_index(TitleProxy)
+
+        title = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
         self.assertEqual('Whoopee', indexed['title'])
         self.assertEqual('Whoopee', indexed['text'])
 
