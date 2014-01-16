@@ -8,11 +8,10 @@ from django.utils.encoding import force_unicode
 from django.utils import timezone
 
 import cms
-from cms.models.pluginmodel import CMSPlugin
+from cms.models import CMSPlugin, Title
 
 from haystack import indexes
 
-from .models import TitleProxy
 from .conf import settings
 from .utils import _get_index_base, strip_tags
 
@@ -78,7 +77,7 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
         return text
 
     def get_model(self):
-        return TitleProxy
+        return Title
 
     def get_index_queryset(self, language):
         # get the correct language and exclude pages that have a redirect

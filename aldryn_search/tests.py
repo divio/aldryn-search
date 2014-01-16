@@ -83,10 +83,10 @@ class PluginIndexingTests(TestCase):
         search_conn = connections[DEFAULT_ALIAS]
         unified_index = search_conn.get_unified_index()
 
-        from .models import TitleProxy
-        index = unified_index.get_index(TitleProxy)
+        from cms.models import Title
+        index = unified_index.get_index(Title)
 
-        title = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
         indexed = index.prepare(title)
         self.assertEqual('Whoopee', indexed['title'])
@@ -102,10 +102,10 @@ class PluginIndexingTests(TestCase):
         search_conn = connections[DEFAULT_ALIAS]
         unified_index = search_conn.get_unified_index()
 
-        from .models import TitleProxy
-        index = unified_index.get_index(TitleProxy)
+        from cms.models import Title
+        index = unified_index.get_index(Title)
 
-        title = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
         indexed = index.prepared_data
         self.assertEqual('Whoopee', indexed['title'])
