@@ -28,6 +28,15 @@ class AldrynIndexBase(indexes.SearchIndex):
     title = indexes.CharField(stored=True, indexed=False)
     site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
 
+    def update_object(self, instance, using=None, **kwargs):
+        """
+        Capture which database we're being updated in, which tells us which
+        language version of the page to return in prepare().
+        """
+        self._backend_alias = using
+        return super(AldrynIndexBase, self).update_object(instance, using,
+            **kwargs)
+
     def index_queryset(self, using=None):
         self._backend_alias = using
         language = self.get_current_language(using)
