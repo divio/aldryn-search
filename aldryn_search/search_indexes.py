@@ -46,13 +46,23 @@ class TitleIndex(_get_index_base(), indexes.Indexable):
 
     def get_search_data(self, obj, language, request):
         plugins = CMSPlugin.objects.filter(language=language, placeholder__in=obj.page.placeholders.all())
-        text = u''
+        fields = [obj.title]
+
         for base_plugin in plugins:
-            text += self.get_text_for_plugin(base_plugin, request)
-        text += obj.page.get_meta_description() or u''
-        text += u' '
-        text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') and obj.page.get_meta_keywords() else u''
-        return text
+            text = self.get_text_for_plugin(base_plugin, request)
+            if text:
+                fields.append(text)
+
+        text = obj.page.get_meta_description()
+        if text:
+            fields.append(text)
+
+        if hasattr(obj.page, 'get_meta_keywords'):
+            text = obj.page.get_meta_keywords()
+            if text:
+                fields.append(text)
+
+        return "\n".join(fields)
 
     def get_text_for_plugin(self, base_plugin, request):
         text = u''

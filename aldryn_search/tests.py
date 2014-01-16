@@ -5,6 +5,7 @@ from django.test.utils import override_settings
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from cms.models.pagemodel import Page
 from cms.models.placeholdermodel import Placeholder
 from cms.models import CMSPlugin
 import cms.api
@@ -26,9 +27,20 @@ class NotIndexedPlugin(CMSPluginBase):
 
 plugin_pool.register_plugin(NotIndexedPlugin)
 
+class FakeTemplateLoader(object):
+    is_usable = True
+    def __init__(self, name, dirs):
+        pass
+    def __iter__(self):
+        yield self.__class__
+        yield "{{baz}}"
 
-@override_settings(CMS_TEMPLATES=(("whee.html", "Whee Template"),),
-    LANGUAGES=(('en', 'English'),))
+
+@override_settings(
+    CMS_TEMPLATES=(("whee.html", "Whee Template"),),
+    LANGUAGES=(('en', 'English'),),
+    TEMPLATE_LOADERS=('aldryn_search.tests.FakeTemplateLoader',),
+    )
 class PluginIndexingTests(TestCase):
 
     def setUp(self):
@@ -59,4 +71,22 @@ class PluginIndexingTests(TestCase):
             self.assertEqual('', self.index.get_text_for_plugin(self.instance, self.request))
         finally:
             del NotIndexedPlugin.search_fulltext
+
+    def test_page_title_is_indexed(self):
+        from cms.api import create_page
+        page = create_page(title="Whoopee", template="whee.html", language="en")
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from aldryn_search.models import TitleProxy
+        index = unified_index.get_index(TitleProxy)
+
+        proxy = TitleProxy.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
+        indexed = index.prepare(proxy)
+        self.assertEqual('Whoopee', indexed['title'])
+        self.assertEqual('Whoopee', indexed['text'])
 
