@@ -15,21 +15,20 @@ from .utils import _get_language_from_alias_func
 LANGUAGE_FROM_ALIAS = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
 
 
-class AldrynIndexBase(indexes.SearchIndex):
+class AbstractIndex(indexes.SearchIndex):
     # For some apps it makes sense to turn on the title indexing.
     INDEX_TITLE = False
 
-    language = indexes.CharField()
-    text = indexes.CharField(document=True, use_template=False)
-    description = indexes.CharField(indexed=False, stored=True, null=True)
-    pub_date = indexes.DateTimeField(null=True)
-    login_required = indexes.BooleanField(default=False)
-    url = indexes.CharField(stored=True, indexed=False)
-    title = indexes.CharField(stored=True, indexed=False)
-    site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
+    def _get_backend(self, using):
+        """
+        We set the backend to allow easy access for things like document search.
+        """
+        self._backend = super(AbstractIndex, self)._get_backend(using)
+        self._backend_alias = using
+        return self._backend
 
     def index_queryset(self, using=None):
-        self._backend_alias = using
+        self._get_backend(using)
         language = self.get_current_language(using)
         filter_kwargs = self.get_index_kwargs(language)
         qs = self.get_index_queryset(language)
@@ -42,7 +41,7 @@ class AldrynIndexBase(indexes.SearchIndex):
         current_language = self.get_current_language(using=self._backend_alias, obj=obj)
 
         with override(current_language):
-            self.prepared_data = super(AldrynIndexBase, self).prepare(obj)
+            self.prepared_data = super(AbstractIndex, self).prepare(obj)
 
             request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
             request = request_factory.get("/")
@@ -128,3 +127,14 @@ class AldrynIndexBase(indexes.SearchIndex):
         """
         raise NotImplementedError()
 
+
+class AldrynIndexBase(AbstractIndex):
+
+    language = indexes.CharField()
+    text = indexes.CharField(document=True, use_template=False)
+    description = indexes.CharField(indexed=False, stored=True, null=True)
+    pub_date = indexes.DateTimeField(null=True)
+    login_required = indexes.BooleanField(default=False)
+    url = indexes.CharField(stored=True, indexed=False)
+    title = indexes.CharField(stored=True, indexed=False)
+    site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
