@@ -16,8 +16,7 @@ LANGUAGE_FROM_ALIAS = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGU
 
 
 class AbstractIndex(indexes.SearchIndex):
-    # For some apps it makes sense to turn on the title indexing.
-    INDEX_TITLE = False
+    text = indexes.CharField(document=True, use_template=False)
 
     def _get_backend(self, using):
         """
@@ -52,18 +51,14 @@ class AbstractIndex(indexes.SearchIndex):
             request.user = AnonymousUser()
 
             self.prepared_data['text'] = self.get_search_data(obj, current_language, request)
-            self.prepared_data['language'] = current_language
-            # We set the following fields here because on some models,
-            # the value of these fields is dependent on the active language
-            # this being the case we extrapolate the language hacks.
-            self.prepared_data['url'] = self.get_url(obj)
-            self.prepared_data['title'] = self.get_title(obj)
-            self.prepared_data['description'] = self.get_description(obj)
-
-            if self.INDEX_TITLE:
-                self.prepared_data['text'] = self.prepared_data['title'] + " " + self.prepared_data['text']
-
+            self.prepare_fields(obj, current_language, request)
             return self.prepared_data
+
+    def get_language(self, obj):
+        """
+        Equivalent to self.prepare_language.
+        """
+        return None
 
     def get_current_language(self, using=None, obj=None):
         """
@@ -76,30 +71,6 @@ class AbstractIndex(indexes.SearchIndex):
         """
         language = self.get_language(obj) if obj else None
         return language or self.get_default_language(using)
-
-    def get_language(self, obj):
-        """
-        Equivalent to self.prepare_language.
-        """
-        return None
-
-    def get_url(self, obj):
-        """
-        Equivalent to self.prepare_url.
-        """
-        return obj.get_absolute_url()
-
-    def get_title(self, obj):
-        """
-        Equivalent to self.prepare_title.
-        """
-        return None
-
-    def get_description(self, obj):
-        """
-        Equivalent to self.prepare_description.
-        """
-        return None
 
     def get_default_language(self, using):
         """
@@ -127,14 +98,52 @@ class AbstractIndex(indexes.SearchIndex):
         """
         raise NotImplementedError()
 
+    def prepare_fields(self, obj, language, request):
+        """
+        This is called to prepare any extra fields.
+        """
+        pass
+
 
 class AldrynIndexBase(AbstractIndex):
+    # For some apps it makes sense to turn on the title indexing.
+    INDEX_TITLE = False
 
     language = indexes.CharField()
-    text = indexes.CharField(document=True, use_template=False)
     description = indexes.CharField(indexed=False, stored=True, null=True)
     pub_date = indexes.DateTimeField(null=True)
     login_required = indexes.BooleanField(default=False)
     url = indexes.CharField(stored=True, indexed=False)
     title = indexes.CharField(stored=True, indexed=False)
     site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
+
+
+    def get_url(self, obj):
+        """
+        Equivalent to self.prepare_url.
+        """
+        return obj.get_absolute_url()
+
+    def get_title(self, obj):
+        """
+        Equivalent to self.prepare_title.
+        """
+        return None
+
+    def get_description(self, obj):
+        """
+        Equivalent to self.prepare_description.
+        """
+        return None
+
+    def prepare_fields(self, obj, language, request):
+        self.prepared_data['language'] = language
+        # We set the following fields here because on some models,
+        # the value of these fields is dependent on the active language
+        # this being the case we extrapolate the language hacks.
+        self.prepared_data['url'] = self.get_url(obj)
+        self.prepared_data['title'] = self.get_title(obj)
+        self.prepared_data['description'] = self.get_description(obj)
+
+        if self.INDEX_TITLE:
+            self.prepared_data['text'] = self.prepared_data['title'] + " " + self.prepared_data['text']
