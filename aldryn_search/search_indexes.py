@@ -57,7 +57,6 @@ class TitleIndex(_get_index_base()):
                 text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
             if getattr(instance, 'search_fulltext', False) or getattr(plugin_type, 'search_fulltext', False):
                 text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
-            text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
         text += obj.page.get_meta_description() or u''
         text += u' '
         text += obj.page.get_meta_keywords() if hasattr(obj.page, 'get_meta_keywords') and obj.page.get_meta_keywords() else u''
