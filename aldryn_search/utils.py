@@ -1,7 +1,9 @@
 import re
 
-from django.utils.encoding import force_unicode
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
+from django.test import RequestFactory
+from django.utils.encoding import force_unicode
 from django.utils.importlib import import_module
 
 from haystack.indexes import SearchIndex
@@ -52,6 +54,22 @@ def _get_index_base():
     if not all(field in BaseClass.fields for field in required_fields):
         raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s must contain at least these fields: %s' % (index_string, required_fields))
     return BaseClass
+
+
+def get_request_for_search(language=None):
+    """
+    Returns a Request instance populated with cms specific attributes.
+    """
+    from .conf import settings
+
+    request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
+    request = request_factory.get("/")
+    request.session = {}
+    request.LANGUAGE_CODE = language or settings.LANGUAGE_CODE
+    # Needed for plugin rendering.
+    request.current_page = None
+    request.user = AnonymousUser()
+    return request
 
 
 def language_from_alias(alias):
