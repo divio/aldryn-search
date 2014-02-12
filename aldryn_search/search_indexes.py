@@ -82,7 +82,7 @@ class TitleIndex(_get_index_base()):
             qs = base_qs.filter(page__site=site_obj.id).filter(
                 Q(page__publication_date__lt=timezone.now()) | Q(page__publication_date__isnull=True),
                 Q(page__publication_end_date__gte=timezone.now()) | Q(page__publication_end_date__isnull=True),
-                page__published=True,
+                published=True,
             ).filter(
                 Q(language=language) & (Q(redirect__exact='') | Q(redirect__isnull=True))
             )
