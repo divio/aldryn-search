@@ -1,16 +1,9 @@
-from distutils.version import LooseVersion
-
-from django.contrib.sites.models import Site
 from django.db.models import Q
-from django.db.models.query import EmptyQuerySet
 from django.template import RequestContext
 from django.utils.encoding import force_unicode
 from django.utils import timezone
 
-import cms
-from cms.models.pluginmodel import CMSPlugin
-
-from haystack import indexes
+from cms.models import Page, CMSPlugin
 
 from .models import TitleProxy
 from .conf import settings
@@ -66,8 +59,7 @@ class TitleIndex(_get_index_base()):
             return text
         if hasattr(instance, 'search_fields'):
             text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
-        if getattr(instance, 'search_fulltext', True) and \
-                getattr(plugin_type, 'search_fulltext', True):
+        if getattr(instance, 'search_fulltext', True) and getattr(plugin_type, 'search_fulltext', True):
             text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
         return text
 
@@ -75,19 +67,14 @@ class TitleIndex(_get_index_base()):
         return TitleProxy
 
     def get_index_queryset(self, language):
-        # get the correct language and exclude pages that have a redirect
-        base_qs = super(TitleIndex, self).get_index_queryset(language).select_related('page')
-        result_qs = EmptyQuerySet()
-        for site_obj in Site.objects.all():
-            qs = base_qs.filter(page__site=site_obj.id).filter(
-                Q(page__publication_date__lt=timezone.now()) | Q(page__publication_date__isnull=True),
-                Q(page__publication_end_date__gte=timezone.now()) | Q(page__publication_end_date__isnull=True),
-                page__published=True,
-            ).filter(
-                Q(language=language) & (Q(redirect__exact='') | Q(redirect__isnull=True))
-            )
-            if 'publisher' in settings.INSTALLED_APPS or LooseVersion(cms.__version__) >= LooseVersion('2.4'):
-                qs = qs.filter(page__publisher_is_draft=False)
-            qs = qs.distinct()
-            result_qs |= qs
-        return result_qs
+        published_pages = Page.objects.filter(
+            Q(publication_date__lt=timezone.now()) | Q(publication_date__isnull=True),
+            Q(publication_end_date__gte=timezone.now()) | Q(publication_end_date__isnull=True),
+        ).values_list('pk', flat=True)
+
+        queryset = TitleProxy.objects.public().filter(
+            Q(redirect__exact='') | Q(redirect__isnull=True),
+            page__in=published_pages,
+            language=language
+        ).select_related('page').distinct()
+        return queryset
