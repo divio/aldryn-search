@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.utils.encoding import force_unicode
 from django.utils import timezone
 
-from cms.models import Page, CMSPlugin
+from cms.models import CMSPlugin
 
 from .models import TitleProxy
 from .conf import settings
