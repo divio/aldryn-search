@@ -67,14 +67,10 @@ class TitleIndex(_get_index_base()):
         return TitleProxy
 
     def get_index_queryset(self, language):
-        published_pages = Page.objects.filter(
-            Q(publication_date__lt=timezone.now()) | Q(publication_date__isnull=True),
-            Q(publication_end_date__gte=timezone.now()) | Q(publication_end_date__isnull=True),
-        ).values_list('pk', flat=True)
-
         queryset = TitleProxy.objects.public().filter(
+            Q(page__publication_date__lt=timezone.now()) | Q(page__publication_date__isnull=True),
+            Q(page__publication_end_date__gte=timezone.now()) | Q(page__publication_end_date__isnull=True),
             Q(redirect__exact='') | Q(redirect__isnull=True),
-            page__in=published_pages,
             language=language
         ).select_related('page').distinct()
         return queryset
