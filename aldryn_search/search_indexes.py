@@ -77,7 +77,7 @@ class TitleIndex(_get_index_base()):
     def get_index_queryset(self, language):
         # get the correct language and exclude pages that have a redirect
         base_qs = super(TitleIndex, self).get_index_queryset(language).select_related('page')
-        result_qs = EmptyQuerySet()
+        result_qs = None
         for site_obj in Site.objects.all():
             qs = base_qs.filter(page__site=site_obj.id).filter(
                 Q(page__publication_date__lt=timezone.now()) | Q(page__publication_date__isnull=True),
@@ -89,5 +89,8 @@ class TitleIndex(_get_index_base()):
             if 'publisher' in settings.INSTALLED_APPS or LooseVersion(cms.__version__) >= LooseVersion('2.4'):
                 qs = qs.filter(page__publisher_is_draft=False)
             qs = qs.distinct()
-            result_qs |= qs
+            if result_qs is None:
+                result_qs = qs
+            else:
+                result_qs |= qs
         return result_qs
