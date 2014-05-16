@@ -40,9 +40,14 @@ class TitleIndex(_get_index_base()):
     def get_description(self, obj):
         return obj.meta_description or None
 
+    def get_plugin_queryset(self, language):
+        queryset = CMSPlugin.objects.filter(language=language)
+        return queryset
+
     def get_search_data(self, obj, language, request):
         current_page = obj.page
-        plugins = CMSPlugin.objects.filter(language=language, placeholder__in=current_page.placeholders.all())
+        placeholders = current_page.placeholders.all()
+        plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text = u''
         for base_plugin in plugins:
             text += self.get_plugin_search_text(base_plugin, request)
