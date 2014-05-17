@@ -7,14 +7,14 @@ from cms.models import CMSPlugin
 
 from .models import TitleProxy
 from .conf import settings
-from .utils import _get_index_base, strip_tags
+from .utils import get_index_base, strip_tags
 
 
 # Backwards compatibility
 _strip_tags = strip_tags
 
 
-class TitleIndex(_get_index_base()):
+class TitleIndex(get_index_base()):
     INDEX_TITLE = True
 
     haystack_use_for_indexing = getattr(settings, "ALDRYN_SEARCH_CMS_PAGE", True)

@@ -37,7 +37,7 @@ def _get_language_from_alias_func(path_or_callable):
     return func
 
 
-def _get_index_base():
+def get_index_base():
     from .conf import settings
 
     index_string = settings.ALDRYN_SEARCH_INDEX_BASE_CLASS

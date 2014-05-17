@@ -4,15 +4,12 @@ from django.test import RequestFactory
 from django.utils.translation import override
 
 from haystack import indexes
-from haystack.constants import DEFAULT_ALIAS
-
-from cms.utils.i18n import get_current_language
 
 from .conf import settings
 from .utils import _get_language_from_alias_func
 
 
-LANGUAGE_FROM_ALIAS = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
+language_from_alias = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
 
 
 class AbstractIndex(indexes.SearchIndex):
@@ -77,11 +74,11 @@ class AbstractIndex(indexes.SearchIndex):
         When using multiple languages, this allows us to specify a fallback based on the
         backend being used.
         """
+        language = None
 
-        if using and not using == DEFAULT_ALIAS and LANGUAGE_FROM_ALIAS:
-            return LANGUAGE_FROM_ALIAS(using)
-        else:
-            return get_current_language() or settings.LANGUAGE_CODE
+        if using and language_from_alias:
+            language = language_from_alias(using)
+        return language or settings.ALDRYN_SEARCH_DEFAULT_LANGUAGE
 
     def get_index_kwargs(self, language):
         """
