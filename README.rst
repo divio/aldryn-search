@@ -75,3 +75,9 @@ want to use this app hook, you can either subclass it and register it yourself, 
 For pagination, aldryn-search uses ``aldryn_search.contrib.paginator.DiggPaginator``. If you want to use this built-in
 pagination, make sure to install`django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
 to ``INSTALLED_APPS``.
+
+Pagination
+==========
+
+Results are paginated according to the ``ALDRYN_SEARCH_PAGINATION`` setting (default: 10).
+If set to ``None`` pagination is disabled.
