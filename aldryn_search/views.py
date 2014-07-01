@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 
@@ -15,7 +16,7 @@ class AldrynSearchView(FormMixin, ListView):
     form_class = ModelSearchForm
     load_all = False
     searchqueryset = None
-    paginate_by = 10
+    paginate_by = getattr(settings, 'ALDRYN_SEARCH_PAGINATION', 10)
     paginator_class = DiggPaginator
 
     def get_form_kwargs(self):
