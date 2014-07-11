@@ -9,6 +9,7 @@ class AldrynSearchAppConf(AppConf):
     LANGUAGE_FROM_ALIAS = 'aldryn_search.utils.language_from_alias'
     DEFAULT_LANGUAGE = settings.LANGUAGE_CODE
     REGISTER_APPHOOK = True
+    PAGINATION = 10
 
     class Meta:
         prefix = 'ALDRYN_SEARCH'

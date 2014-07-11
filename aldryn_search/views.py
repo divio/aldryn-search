@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.conf import settings
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 
 from haystack.forms import ModelSearchForm
 from haystack.query import EmptySearchQuerySet
 
+from .conf import settings
 from .contrib.pagination import DiggPaginator
 
 
@@ -16,7 +16,7 @@ class AldrynSearchView(FormMixin, ListView):
     form_class = ModelSearchForm
     load_all = False
     searchqueryset = None
-    paginate_by = getattr(settings, 'ALDRYN_SEARCH_PAGINATION', 10)
+    paginate_by = settings.ALDRYN_SEARCH_PAGINATION
     paginator_class = DiggPaginator
 
     def get_form_kwargs(self):
