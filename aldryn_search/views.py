@@ -45,6 +45,8 @@ class AldrynSearchView(FormMixin, ListView):
         return super(AldrynSearchView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return self.form.search().exclude(login_required=True)
         return self.form.search()
 
     def get_context_data(self, **kwargs):
