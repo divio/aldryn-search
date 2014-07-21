@@ -1,5 +1,7 @@
 import re
 
+import six
+
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
 from django.test import RequestFactory
@@ -89,6 +91,15 @@ def language_from_alias(alias):
     languages = [language[0] for language in settings.LANGUAGES]
 
     return alias if alias in languages else None
+
+
+def get_model_path(model_or_string):
+    if not isinstance(model_or_string, six.string_types):
+        # it's a model class
+        app_label = model_or_string._meta.app_label
+        model_name = model_or_string._meta.object_name
+        model_or_string = '{0},{1}'.format([app_label, model_name])
+    return model_or_string
 
 
 def strip_tags(value):

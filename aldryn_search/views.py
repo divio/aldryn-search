@@ -4,16 +4,21 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
 
 from haystack.forms import ModelSearchForm
-from haystack.query import EmptySearchQuerySet, SearchQuerySet
+from haystack.query import SearchQuerySet
 
 from aldryn_common.paginator import DiggPaginator
 
 from .conf import settings
-from .utils import alias_from_language
+from .utils import alias_from_language, get_model_path
 
 
 class AldrynSearchView(FormMixin, ListView):
     form_class = ModelSearchForm
+
+    # A list of models to limit search by.
+    # Only indexes registered to these models will be searched.
+    models = None
+
     load_all = False
 
     paginate_by = settings.ALDRYN_SEARCH_PAGINATION
@@ -34,6 +39,10 @@ class AldrynSearchView(FormMixin, ListView):
 
     def get_form(self, form_class):
         data = self.request.GET or None
+
+        if data and self.models:
+            data = data.copy()
+            data.setlist('models', (get_model_path(model) for model in self.models))
         form_kwargs = self.get_form_kwargs()
         return form_class(data, **form_kwargs)
 
