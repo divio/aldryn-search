@@ -6,6 +6,7 @@ from django.utils.translation import override
 from haystack import indexes
 
 from .conf import settings
+from .helpers import get_request
 from .utils import _get_language_from_alias_func
 
 
@@ -37,16 +38,8 @@ class AbstractIndex(indexes.SearchIndex):
         current_language = self.get_current_language(using=self._backend_alias, obj=obj)
 
         with override(current_language):
+            request = get_request(current_language)
             self.prepared_data = super(AbstractIndex, self).prepare(obj)
-
-            request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
-            request = request_factory.get("/")
-            request.session = {}
-            request.LANGUAGE_CODE = current_language
-            # Needed for plugin rendering.
-            request.current_page = None
-            request.user = AnonymousUser()
-
             self.prepared_data['text'] = self.get_search_data(obj, current_language, request)
             self.prepare_fields(obj, current_language, request)
             return self.prepared_data

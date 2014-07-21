@@ -1,0 +1,18 @@
+==== 0.1.2 (2013-08-07) ====
+==== 0.1.3 (2013-11-11) ====
+==== 0.1.4 (2014-01-29) ====
+==== 0.1.5 (2014-01-29) ====
+==== 0.1.6 (2014-01-30) ====
+==== 0.1.7 (2014-03-20) ====
+==== 0.1.8 (2014-05-16) ====
+==== 0.1.9 (2014-05-17) ====
+==== 0.2.0 (2014-07-x) ====
+
+- Removed contrib.pagination.DiggPaginator (use aldryn_common.paginator.DiggPaginator)
+- Added alias_from_language utility function
+- Renamed searchqueryset to search_queryset
+- Adds search_queryset_class
+- Adds helpers module
+- Adds helper function get_plugin_index_data
+- Adds models attribute on view, to limit search by specific models.
+- Renamed get_request_for_search to get_request and moved it to helpers module

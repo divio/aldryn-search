@@ -4,13 +4,12 @@ from django.test.utils import override_settings
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from cms.models.pagemodel import Page
 from cms.models.placeholdermodel import Placeholder
 from cms.models import CMSPlugin
 
 from aldryn_search.search_indexes import TitleIndex
 
-from .utils import get_request_for_search
+from .helpers import get_request
 
 
 class NotIndexedPlugin(CMSPluginBase):
@@ -38,7 +37,7 @@ class PluginIndexingTests(TestCase):
         instance.pk = 1234 # otherwise plugin_meta_context_processor() crashes
         self.instance = instance
         self.index = TitleIndex()
-        self.request = get_request_for_search(language='en')
+        self.request = get_request(language='en')
 
     def test_plugin_indexing_is_enabled_by_default(self):
         self.assertEqual("i am rendered: %s " % NotIndexedPlugin.INDEXED_MESSAGE,
