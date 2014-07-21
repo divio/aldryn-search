@@ -90,7 +90,7 @@ class AbstractIndex(indexes.SearchIndex):
         """
         Returns a string that will be used to populate the text field (primary field).
         """
-        raise NotImplementedError()
+        return ''
 
     def prepare_fields(self, obj, language, request):
         """
