@@ -6,7 +6,23 @@ from django.test import RequestFactory
 from django.utils.encoding import force_unicode
 from django.utils.importlib import import_module
 
+from haystack import DEFAULT_ALIAS
 from haystack.indexes import SearchIndex
+
+from cms.utils.i18n import get_language_code
+
+from .conf import settings
+
+
+def alias_from_language(language):
+    """
+    Returns alias if alias is a valid language.
+    """
+    language = get_language_code(language)
+
+    if language == settings.ALDRYN_SEARCH_DEFAULT_LANGUAGE:
+        return DEFAULT_ALIAS
+    return language
 
 
 def get_callable(string_or_callable):
@@ -23,8 +39,6 @@ def get_callable(string_or_callable):
 
 
 def _get_language_from_alias_func(path_or_callable):
-    from .conf import settings
-
     if path_or_callable:
         try:
             func = get_callable(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
@@ -38,8 +52,6 @@ def _get_language_from_alias_func(path_or_callable):
 
 
 def get_index_base():
-    from .conf import settings
-
     index_string = settings.ALDRYN_SEARCH_INDEX_BASE_CLASS
     try:
         BaseClass = get_callable(index_string)
@@ -60,8 +72,6 @@ def get_request_for_search(language=None):
     """
     Returns a Request instance populated with cms specific attributes.
     """
-    from .conf import settings
-
     request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
     request = request_factory.get("/")
     request.session = {}
@@ -76,8 +86,6 @@ def language_from_alias(alias):
     """
     Returns alias if alias is a valid language.
     """
-    from .conf import settings
-
     languages = [language[0] for language in settings.LANGUAGES]
 
     return alias if alias in languages else None

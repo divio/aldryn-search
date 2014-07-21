@@ -16,7 +16,7 @@ _strip_tags = strip_tags
 class TitleIndex(get_index_base()):
     INDEX_TITLE = True
 
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_SEARCH_CMS_PAGE", True)
+    haystack_use_for_indexing = settings.ALDRYN_SEARCH_CMS_PAGE
 
     def prepare_pub_date(self, obj):
         return obj.page.publication_date
