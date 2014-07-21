@@ -15,5 +15,5 @@ class AldrynSearchApphook(CMSApp):
         url('^$', AldrynSearchView.as_view(), name='aldryn-search'),
     ),]
 
-if settings.ALDRYN_SEARCH_REGISTER_APPHOOK:
+if getattr(settings, 'ALDRYN_SEARCH_REGISTER_APPHOOK', False):
     apphook_pool.register(AldrynSearchApphook)

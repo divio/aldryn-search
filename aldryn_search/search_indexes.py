@@ -3,9 +3,8 @@ from django.template import RequestContext
 from django.utils.encoding import force_unicode
 from django.utils import timezone
 
-from cms.models import CMSPlugin
+from cms.models import CMSPlugin, Title
 
-from .models import TitleProxy
 from .conf import settings
 from .utils import get_index_base, strip_tags
 
@@ -69,10 +68,10 @@ class TitleIndex(get_index_base()):
         return text
 
     def get_model(self):
-        return TitleProxy
+        return Title
 
     def get_index_queryset(self, language):
-        queryset = TitleProxy.objects.public().filter(
+        queryset = Title.objects.public().filter(
             Q(page__publication_date__lt=timezone.now()) | Q(page__publication_date__isnull=True),
             Q(page__publication_end_date__gte=timezone.now()) | Q(page__publication_end_date__isnull=True),
             Q(redirect__exact='') | Q(redirect__isnull=True),

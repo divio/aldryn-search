@@ -4,6 +4,7 @@ from django.test.utils import override_settings
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from cms.models.pagemodel import Page
 from cms.models.placeholdermodel import Placeholder
 from cms.models import CMSPlugin
 
@@ -24,8 +25,7 @@ class NotIndexedPlugin(CMSPluginBase):
 plugin_pool.register_plugin(NotIndexedPlugin)
 
 
-@override_settings(CMS_TEMPLATES=(("whee.html", "Whee Template"),),
-LANGUAGES=(('en', 'English'),))
+@override_settings(CMS_TEMPLATES=(("whee.html", "Whee Template"),),LANGUAGES=(('en', 'English'),))
 class PluginIndexingTests(TestCase):
 
     def setUp(self):
@@ -55,3 +55,41 @@ class PluginIndexingTests(TestCase):
             self.assertEqual('', self.index.get_plugin_search_text(self.instance, self.request))
         finally:
             del NotIndexedPlugin.search_fulltext
+
+    def test_page_title_is_indexed_using_prepare(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        from cms.api import create_page
+        page = create_page(title="Whoopee", template="whee.html", language="en")
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('Whoopee', indexed['title'])
+        self.assertEqual('Whoopee', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        from cms.api import create_page
+        page = create_page(title="Whoopee", template="whee.html", language="en")
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('Whoopee', indexed['title'])
+        self.assertEqual('Whoopee', indexed['text'])
