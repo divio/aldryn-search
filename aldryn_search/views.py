@@ -4,11 +4,12 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
 
 from haystack.forms import ModelSearchForm
-from haystack.query import EmptySearchQuerySet
+from haystack.query import EmptySearchQuerySet, SearchQuerySet
 
 from aldryn_common.paginator import DiggPaginator
 
 from .conf import settings
+from .utils import alias_from_language
 
 
 class AldrynSearchView(FormMixin, ListView):
@@ -16,7 +17,7 @@ class AldrynSearchView(FormMixin, ListView):
     queryset = EmptySearchQuerySet()
     form_class = ModelSearchForm
     load_all = False
-    searchqueryset = None
+    searchqueryset = SearchQuerySet
     paginate_by = settings.ALDRYN_SEARCH_PAGINATION
     paginator_class = DiggPaginator
 
@@ -24,7 +25,9 @@ class AldrynSearchView(FormMixin, ListView):
         kwargs = super(AldrynSearchView, self).get_form_kwargs()
         kwargs['load_all'] = self.load_all
         if self.searchqueryset is not None:
-            kwargs['searchqueryset'] = self.searchqueryset
+            language = get_language_from_request(self.request, check_path=True)
+            connection_alias = alias_from_language(language)
+            kwargs['searchqueryset'] = self.searchqueryset(using=connection_alias)
         return kwargs
 
     def get_form(self, form_class):
