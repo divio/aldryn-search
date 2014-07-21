@@ -86,9 +86,6 @@ class AbstractIndex(indexes.SearchIndex):
         """
         return {}
 
-    def get_model(self):
-        raise NotImplementedError()
-
     def get_search_data(self, obj, language, request):
         """
         Returns a string that will be used to populate the text field (primary field).
