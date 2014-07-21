@@ -1,11 +1,10 @@
 from django.db.models import Q
-from django.template import RequestContext
-from django.utils.encoding import force_unicode
 from django.utils import timezone
 
 from cms.models import CMSPlugin, Title
 
 from .conf import settings
+from .helpers import get_plugin_index_data
 from .utils import get_index_base, strip_tags
 
 
@@ -47,25 +46,26 @@ class TitleIndex(get_index_base()):
         current_page = obj.page
         placeholders = current_page.placeholders.all()
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
-        text = u''
+        text_bits = []
+
         for base_plugin in plugins:
-            text += self.get_plugin_search_text(base_plugin, request)
-        text += current_page.get_meta_description() or u''
-        text += u' '
-        text += current_page.get_meta_keywords() if hasattr(current_page, 'get_meta_keywords') and current_page.get_meta_keywords() else u''
-        return text
+            plugin_content = self.get_plugin_search_text(base_plugin, request)
+            text_bits.append(plugin_content)
+
+        page_meta_description = current_page.get_meta_description()
+
+        if page_meta_description:
+            text_bits.append(page_meta_description)
+
+        page_meta_keywords = getattr(current_page, 'get_meta_keywords', None)
+
+        if page_meta_keywords:
+            text_bits.append(page_meta_keywords)
+
+        return ' '.join(text_bits) if text_bits else ''
 
     def get_plugin_search_text(self, base_plugin, request):
-        text = u''
-        instance, plugin_type = base_plugin.get_plugin_instance()
-        if instance is None:
-            # this is an empty plugin
-            return text
-        if hasattr(instance, 'search_fields'):
-            text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
-        if getattr(instance, 'search_fulltext', True) and getattr(plugin_type, 'search_fulltext', True):
-            text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
-        return text
+        return get_plugin_index_data(base_plugin, request)
 
     def get_model(self):
         return Title
