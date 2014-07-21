@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-
+from django.utils.translation import get_language_from_request
+from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
-from django.views.generic.list import ListView
 
 from haystack.forms import ModelSearchForm
 from haystack.query import EmptySearchQuerySet
 
+from aldryn_common.paginator import DiggPaginator
+
 from .conf import settings
-from .contrib.pagination import DiggPaginator
 
 
 class AldrynSearchView(FormMixin, ListView):
