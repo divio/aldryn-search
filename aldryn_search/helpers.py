@@ -5,7 +5,7 @@ from django.utils.encoding import force_unicode
 from .utils import strip_tags
 
 
-def get_plugin_index_data(self, base_plugin, request):
+def get_plugin_index_data(base_plugin, request):
     text = u''
     instance, plugin_type = base_plugin.get_plugin_instance()
     if instance is None:
