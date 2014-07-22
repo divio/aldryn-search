@@ -9,16 +9,24 @@ from .utils import strip_tags
 
 
 def get_plugin_index_data(base_plugin, request):
-    text = u''
+    text_bits = []
     instance, plugin_type = base_plugin.get_plugin_instance()
+
     if instance is None:
         # this is an empty plugin
-        return text
-    if hasattr(instance, 'search_fields'):
-        text += u' '.join(force_unicode(strip_tags(getattr(instance, field, ''))) for field in instance.search_fields)
-    if getattr(instance, 'search_fulltext', True) and getattr(plugin_type, 'search_fulltext', True):
-        text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
-    return text
+        return ''
+
+    search_contents = getattr(instance, 'search_fulltext', True) or getattr(plugin_type, 'search_fulltext', True)
+
+    for field in getattr(instance, 'search_fields', []):
+        field_content = strip_tags(getattr(instance, field, ''))
+        text_bits.append(force_unicode(field_content))
+
+    if search_contents:
+        plugin_contents = instance.render_plugin(context=RequestContext(request))
+        text_bits.append(strip_tags(plugin_contents))
+
+    return ' '.join(text_bits) if text_bits else ''
 
 
 def get_request(language=None):
