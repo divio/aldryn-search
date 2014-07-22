@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory
 from django.utils.translation import override
 
 from haystack import indexes
@@ -38,11 +36,14 @@ class AbstractIndex(indexes.SearchIndex):
         current_language = self.get_current_language(using=self._backend_alias, obj=obj)
 
         with override(current_language):
-            request = get_request(current_language)
+            request = self.get_request_instance(obj, current_language)
             self.prepared_data = super(AbstractIndex, self).prepare(obj)
             self.prepared_data['text'] = self.get_search_data(obj, current_language, request)
             self.prepare_fields(obj, current_language, request)
             return self.prepared_data
+
+    def get_request_instance(self, obj, language):
+        return get_request(language)
 
     def get_language(self, obj):
         """
