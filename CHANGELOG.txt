@@ -14,6 +14,7 @@
 - Adds search_queryset_class to search view
 - Adds helpers module
 - Adds helper function get_plugin_index_data
+- Adds new utility clean_join
 - Adds models attribute on view, to limit search by specific models.
 - Renamed get_request_for_search to get_request and moved it to helpers module
 - Adds get_request_instance method to base index, this allows adding custom attributes to request object.
