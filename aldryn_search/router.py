@@ -7,6 +7,7 @@ from haystack.constants import DEFAULT_ALIAS
 
 
 class LanguageRouter(routers.BaseRouter):
+
     def for_read(self, **hints):
         language = get_language()
         if language not in settings.HAYSTACK_CONNECTIONS:

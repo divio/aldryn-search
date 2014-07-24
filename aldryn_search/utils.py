@@ -1,12 +1,35 @@
 import re
 
-from django.contrib.auth.models import AnonymousUser
+import six
+
 from django.core.exceptions import ImproperlyConfigured
-from django.test import RequestFactory
 from django.utils.encoding import force_unicode
 from django.utils.importlib import import_module
 
+from haystack import DEFAULT_ALIAS
 from haystack.indexes import SearchIndex
+
+from cms.utils.i18n import get_language_code
+
+from .conf import settings
+
+
+def alias_from_language(language):
+    """
+    Returns alias if alias is a valid language.
+    """
+    language = get_language_code(language)
+
+    if language == settings.ALDRYN_SEARCH_DEFAULT_LANGUAGE:
+        return DEFAULT_ALIAS
+    return language
+
+
+def clean_join(separator, iterable):
+    """
+    Filters out iterable to only join non empty items.
+    """
+    return separator.join(filter(None, iterable))
 
 
 def get_callable(string_or_callable):
@@ -23,8 +46,6 @@ def get_callable(string_or_callable):
 
 
 def _get_language_from_alias_func(path_or_callable):
-    from .conf import settings
-
     if path_or_callable:
         try:
             func = get_callable(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
@@ -38,8 +59,6 @@ def _get_language_from_alias_func(path_or_callable):
 
 
 def get_index_base():
-    from .conf import settings
-
     index_string = settings.ALDRYN_SEARCH_INDEX_BASE_CLASS
     try:
         BaseClass = get_callable(index_string)
@@ -56,31 +75,22 @@ def get_index_base():
     return BaseClass
 
 
-def get_request_for_search(language=None):
-    """
-    Returns a Request instance populated with cms specific attributes.
-    """
-    from .conf import settings
-
-    request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
-    request = request_factory.get("/")
-    request.session = {}
-    request.LANGUAGE_CODE = language or settings.LANGUAGE_CODE
-    # Needed for plugin rendering.
-    request.current_page = None
-    request.user = AnonymousUser()
-    return request
-
-
 def language_from_alias(alias):
     """
     Returns alias if alias is a valid language.
     """
-    from .conf import settings
-
     languages = [language[0] for language in settings.LANGUAGES]
 
     return alias if alias in languages else None
+
+
+def get_model_path(model_or_string):
+    if not isinstance(model_or_string, six.string_types):
+        # it's a model class
+        app_label = model_or_string._meta.app_label
+        model_name = model_or_string._meta.object_name
+        model_or_string = '{0},{1}'.format([app_label, model_name])
+    return model_or_string
 
 
 def strip_tags(value):

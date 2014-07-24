@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory
+import warnings
 from django.utils.translation import override
 
 from haystack import indexes
 
 from .conf import settings
-from .utils import _get_language_from_alias_func
+from .helpers import get_request
+from .utils import clean_join, _get_language_from_alias_func
 
 
 language_from_alias = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
@@ -37,19 +37,14 @@ class AbstractIndex(indexes.SearchIndex):
         current_language = self.get_current_language(using=self._backend_alias, obj=obj)
 
         with override(current_language):
+            request = self.get_request_instance(obj, current_language)
             self.prepared_data = super(AbstractIndex, self).prepare(obj)
-
-            request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
-            request = request_factory.get("/")
-            request.session = {}
-            request.LANGUAGE_CODE = current_language
-            # Needed for plugin rendering.
-            request.current_page = None
-            request.user = AnonymousUser()
-
             self.prepared_data['text'] = self.get_search_data(obj, current_language, request)
             self.prepare_fields(obj, current_language, request)
             return self.prepared_data
+
+    def get_request_instance(self, obj, language):
+        return get_request(language)
 
     def get_language(self, obj):
         """
@@ -86,14 +81,11 @@ class AbstractIndex(indexes.SearchIndex):
         """
         return {}
 
-    def get_model(self):
-        raise NotImplementedError()
-
     def get_search_data(self, obj, language, request):
         """
         Returns a string that will be used to populate the text field (primary field).
         """
-        raise NotImplementedError()
+        return ''
 
     def prepare_fields(self, obj, language, request):
         """
@@ -104,7 +96,7 @@ class AbstractIndex(indexes.SearchIndex):
 
 class AldrynIndexBase(AbstractIndex):
     # For some apps it makes sense to turn on the title indexing.
-    INDEX_TITLE = False
+    index_title = False
 
     language = indexes.CharField()
     description = indexes.CharField(indexed=False, stored=True, null=True)
@@ -114,6 +106,11 @@ class AldrynIndexBase(AbstractIndex):
     title = indexes.CharField(stored=True, indexed=False)
     site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
 
+    def __init__(self):
+        if hasattr(self, 'INDEX_TITLE'):
+            warning_message = 'AldrynIndexBase.INDEX_TITLE is deprecated; use AldrynIndexBase.index_title instead'
+            warnings.warn(warning_message, PendingDeprecationWarning)
+        super(AldrynIndexBase, self).__init__()
 
     def get_url(self, obj):
         """
@@ -142,5 +139,7 @@ class AldrynIndexBase(AbstractIndex):
         self.prepared_data['title'] = self.get_title(obj)
         self.prepared_data['description'] = self.get_description(obj)
 
-        if self.INDEX_TITLE:
-            self.prepared_data['text'] = self.prepared_data['title'] + " " + self.prepared_data['text']
+        if self.index_title or getattr(self, 'INDEX_TITLE', False):
+            prepared_text = self.prepared_data['text']
+            prepared_title = self.prepared_data['title']
+            self.prepared_data['text'] = clean_join(' ', [prepared_title, prepared_text])

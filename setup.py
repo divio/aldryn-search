@@ -9,6 +9,7 @@ install_requires = [
     'django-classy-tags>=0.3.2',
     'django-haystack>=2.0.0',
     'django-standard-form',
+    'aldryn-common',
 ]
 
 setup(
