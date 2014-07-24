@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import warnings
 from django.utils.translation import override
 
 from haystack import indexes
@@ -95,7 +96,7 @@ class AbstractIndex(indexes.SearchIndex):
 
 class AldrynIndexBase(AbstractIndex):
     # For some apps it makes sense to turn on the title indexing.
-    INDEX_TITLE = False
+    index_title = False
 
     language = indexes.CharField()
     description = indexes.CharField(indexed=False, stored=True, null=True)
@@ -105,6 +106,11 @@ class AldrynIndexBase(AbstractIndex):
     title = indexes.CharField(stored=True, indexed=False)
     site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
 
+    def __init__(self):
+        if hasattr(self, 'INDEX_TITLE'):
+            warning_message = 'AldrynIndexBase.INDEX_TITLE is deprecated; use AldrynIndexBase.index_title instead'
+            warnings.warn(warning_message, PendingDeprecationWarning)
+        super(AldrynIndexBase, self).__init__()
 
     def get_url(self, obj):
         """
@@ -133,5 +139,5 @@ class AldrynIndexBase(AbstractIndex):
         self.prepared_data['title'] = self.get_title(obj)
         self.prepared_data['description'] = self.get_description(obj)
 
-        if self.INDEX_TITLE:
+        if self.index_title or getattr(self, 'INDEX_TITLE', False):
             self.prepared_data['text'] = self.prepared_data['title'] + " " + self.prepared_data['text']

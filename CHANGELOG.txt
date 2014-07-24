@@ -10,11 +10,12 @@
 
 - Removed contrib.pagination.DiggPaginator (use aldryn_common.paginator.DiggPaginator)
 - Added alias_from_language utility function
-- Renamed searchqueryset to search_queryset
-- Adds search_queryset_class
+- Renamed searchqueryset to search_queryset in search view
+- Adds search_queryset_class to search view
 - Adds helpers module
 - Adds helper function get_plugin_index_data
 - Adds models attribute on view, to limit search by specific models.
 - Renamed get_request_for_search to get_request and moved it to helpers module
 - Adds get_request_instance method to base index, this allows adding custom attributes to request object.
-
+- Renamed INDEX_TITLE to index_title to keep the same format as haystack.
+- Refactored plugin data indexing to split on whitespace, thus reducing index size.

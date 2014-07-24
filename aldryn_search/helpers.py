@@ -20,13 +20,19 @@ def get_plugin_index_data(base_plugin, request):
 
     for field in getattr(instance, 'search_fields', []):
         field_content = strip_tags(getattr(instance, field, ''))
-        text_bits.append(force_unicode(field_content))
+
+        if field_content:
+            field_content = force_unicode(field_content)
+            text_bits.extend(field_content.split())
 
     if search_contents:
         plugin_contents = instance.render_plugin(context=RequestContext(request))
-        text_bits.append(strip_tags(plugin_contents))
 
-    return ' '.join(text_bits) if text_bits else ''
+        if plugin_contents:
+            plugin_contents = strip_tags(plugin_contents)
+            text_bits.extend(plugin_contents.split())
+
+    return  text_bits
 
 
 def get_request(language=None):

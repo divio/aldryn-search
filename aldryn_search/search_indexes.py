@@ -13,7 +13,7 @@ _strip_tags = strip_tags
 
 
 class TitleIndex(get_index_base()):
-    INDEX_TITLE = True
+    index_title = True
 
     haystack_use_for_indexing = settings.ALDRYN_SEARCH_CMS_PAGE
 
@@ -49,8 +49,8 @@ class TitleIndex(get_index_base()):
         text_bits = []
 
         for base_plugin in plugins:
-            plugin_content = self.get_plugin_search_text(base_plugin, request)
-            text_bits.append(plugin_content)
+            plugin_content_bits = self.get_plugin_search_text(base_plugin, request)
+            text_bits.extend(plugin_content_bits)
 
         page_meta_description = current_page.get_meta_description()
 
@@ -62,7 +62,7 @@ class TitleIndex(get_index_base()):
         if page_meta_keywords:
             text_bits.append(page_meta_keywords)
 
-        return ' '.join(text_bits) if text_bits else ''
+        return ' '.join(text_bits)
 
     def get_plugin_search_text(self, base_plugin, request):
         return get_plugin_index_data(base_plugin, request)
