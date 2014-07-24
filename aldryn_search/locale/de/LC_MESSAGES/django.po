@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-06 20:34+0200\n"
+"POT-Creation-Date: 2014-07-24 16:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,25 +21,33 @@ msgstr ""
 msgid "aldryn search"
 msgstr "Aldryn Suche"
 
-#: templates/aldryn_search/search.html:5
+#: templates/aldryn_search/search_results.html:6
 msgid "enter your search term"
 msgstr "Suchbegriffe eingeben"
 
-#: templates/aldryn_search/search.html:19
+#: templates/aldryn_search/search_results.html:16
 msgid "results"
 msgstr "Resultaten"
 
-#: templates/aldryn_search/inc/pagination.html:6
+#: templates/aldryn_search/includes/pagination.html:7
 #, python-format
 msgid "%(from)s – %(until)s of %(count)s %(obj_string)s are displayed"
 msgstr "%(from)s – %(until)s von %(count)s %(obj_string)s werden angezeigt"
 
-#: templates/aldryn_search/inc/pagination.html:25
-#, python-format
-msgid "Displaying all %(count)s %(obj_string)s"
-msgstr "Alle %(count)s %(obj_string)s werden angezeigt"
+#: templates/aldryn_search/includes/pagination.html:11
+msgid "previous"
+msgstr ""
 
-#: templates/aldryn_search/inc/pagination.html:27
-#, python-format
-msgid "Displaying all %(count)s objects"
-msgstr "Alle %(count)s Objekte werden angezeigt"
+#: templates/aldryn_search/includes/pagination.html:25
+msgid "next"
+msgstr ""
+
+#: templates/aldryn_search/includes/search_items.html:12
+msgid "No results found for"
+msgstr ""
+
+#~ msgid "Displaying all %(count)s %(obj_string)s"
+#~ msgstr "Alle %(count)s %(obj_string)s werden angezeigt"
+
+#~ msgid "Displaying all %(count)s objects"
+#~ msgstr "Alle %(count)s Objekte werden angezeigt"

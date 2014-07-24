@@ -25,6 +25,13 @@ def alias_from_language(language):
     return language
 
 
+def clean_join(separator, iterable):
+    """
+    Filters out iterable to only join non empty items.
+    """
+    return separator.join(filter(None, iterable))
+
+
 def get_callable(string_or_callable):
     """
     If given a callable then it returns it, otherwise it resolves the path

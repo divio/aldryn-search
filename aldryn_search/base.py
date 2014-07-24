@@ -6,7 +6,7 @@ from haystack import indexes
 
 from .conf import settings
 from .helpers import get_request
-from .utils import _get_language_from_alias_func
+from .utils import clean_join, _get_language_from_alias_func
 
 
 language_from_alias = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
@@ -140,4 +140,6 @@ class AldrynIndexBase(AbstractIndex):
         self.prepared_data['description'] = self.get_description(obj)
 
         if self.index_title or getattr(self, 'INDEX_TITLE', False):
-            self.prepared_data['text'] = self.prepared_data['title'] + " " + self.prepared_data['text']
+            prepared_text = self.prepared_data['text']
+            prepared_title = self.prepared_data['title']
+            self.prepared_data['text'] = clean_join(' ', [prepared_title, prepared_text])

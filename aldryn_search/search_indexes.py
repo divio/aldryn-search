@@ -5,7 +5,7 @@ from cms.models import CMSPlugin, Title
 
 from .conf import settings
 from .helpers import get_plugin_index_data
-from .utils import get_index_base, strip_tags
+from .utils import clean_join, get_index_base, strip_tags
 
 
 # Backwards compatibility
@@ -50,9 +50,9 @@ class TitleIndex(get_index_base()):
 
         for base_plugin in plugins:
             plugin_content_bits = self.get_plugin_search_text(base_plugin, request)
-            text_bits.extend(plugin_content_bits)
+            text_bits.append(plugin_content_bits)
 
-        page_meta_description = current_page.get_meta_description()
+        page_meta_description = current_page.get_meta_description(fallback=False, language=language)
 
         if page_meta_description:
             text_bits.append(page_meta_description)
@@ -62,10 +62,11 @@ class TitleIndex(get_index_base()):
         if page_meta_keywords:
             text_bits.append(page_meta_keywords)
 
-        return ' '.join(text_bits)
+        return clean_join(' ', text_bits)
 
     def get_plugin_search_text(self, base_plugin, request):
-        return get_plugin_index_data(base_plugin, request)
+        plugin_content_bits = get_plugin_index_data(base_plugin, request)
+        return clean_join(' ', plugin_content_bits)
 
     def get_model(self):
         return Title

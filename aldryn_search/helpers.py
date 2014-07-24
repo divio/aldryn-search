@@ -2,6 +2,7 @@
 from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.test import RequestFactory
+from django.utils.text import smart_split
 from django.utils.encoding import force_unicode
 
 from .conf import settings
@@ -14,23 +15,34 @@ def get_plugin_index_data(base_plugin, request):
 
     if instance is None:
         # this is an empty plugin
-        return ''
+        return text_bits
 
-    search_contents = getattr(instance, 'search_fulltext', True) or getattr(plugin_type, 'search_fulltext', True)
+    if hasattr(instance, 'search_fulltext'):
+        # check if the plugin instance has search enabled
+        search_contents = instance.search_fulltext
+    elif hasattr(base_plugin, 'search_fulltext'):
+        # now check in the base plugin instance (CMSPlugin)
+        search_contents = base_plugin.search_fulltext
+    elif hasattr(plugin_type, 'search_fulltext'):
+        # last check in the plugin class (CMSPluginBase)
+        search_contents = plugin_type.search_fulltext
+    else:
+        # enable by default
+        search_contents = True
 
     for field in getattr(instance, 'search_fields', []):
         field_content = strip_tags(getattr(instance, field, ''))
 
         if field_content:
             field_content = force_unicode(field_content)
-            text_bits.extend(field_content.split())
+            text_bits.extend(smart_split(field_content))
 
     if search_contents:
         plugin_contents = instance.render_plugin(context=RequestContext(request))
 
         if plugin_contents:
             plugin_contents = strip_tags(plugin_contents)
-            text_bits.extend(plugin_contents.split())
+            text_bits.extend(smart_split(plugin_contents))
 
     return  text_bits
 
