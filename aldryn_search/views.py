@@ -36,9 +36,9 @@ class AldrynSearchView(FormMixin, ListView):
         kwargs['load_all'] = self.load_all
         kwargs['searchqueryset'] = self.get_search_queryset()
 
-        data = self.request.GET or None
+        data = self.request.GET
 
-        if data and self.models:
+        if self.models:
             data = data.copy()
             data.setlist('models', (get_model_path(model) for model in self.models))
         kwargs['data'] = data
