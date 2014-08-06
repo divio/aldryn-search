@@ -89,8 +89,8 @@ def get_model_path(model_or_string):
         # it's a model class
         app_label = model_or_string._meta.app_label
         model_name = model_or_string._meta.object_name
-        model_or_string = '{0},{1}'.format([app_label, model_name])
-    return model_or_string
+        model_or_string = '{0}.{1}'.format(app_label, model_name)
+    return model_or_string.lower()
 
 
 def strip_tags(value):
