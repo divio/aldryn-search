@@ -20,3 +20,11 @@
 - Adds get_request_instance method to base index, this allows adding custom attributes to request object.
 - Renamed INDEX_TITLE to index_title to keep the same format as haystack.
 - Refactored plugin data indexing to split on whitespace, thus reducing index size.
+
+==== 0.2.1 (2014-07-24) ====
+
+- Fixed bug in form handling on search view.
+
+==== 0.2.2 (2014-08-06) ====
+
+- Fixed bug in get_model_path utility. issue #19
