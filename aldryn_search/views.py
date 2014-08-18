@@ -76,7 +76,6 @@ class AldrynSearchView(FormMixin, ListView):
         context = super(AldrynSearchView, self).get_context_data(**kwargs)
         context['query'] = self.get_query(self.form)
         context['form'] = self.form
-        results = context['object_list']
-        if results and hasattr(results, 'query') and results.query.backend.include_spelling:
+        if self.object_list.query.backend.include_spelling:
             context['suggestion'] = self.form.get_suggestion()
         return context
