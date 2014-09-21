@@ -59,8 +59,8 @@ class TitleIndex(get_index_base()):
 
         page_meta_keywords = getattr(current_page, 'get_meta_keywords', None)
 
-        if page_meta_keywords:
-            text_bits.append(page_meta_keywords)
+        if callable(page_meta_keywords):
+            text_bits.append(page_meta_keywords())
 
         return clean_join(' ', text_bits)
 
