@@ -28,3 +28,9 @@
 ==== 0.2.2 (2014-08-06) ====
 
 - Fixed bug in get_model_path utility. issue #19
+
+==== 0.2.3 (2014-09-30) ====
+
+- Fixed TypeError when rebuilding page index on cms 2.4
+- Fixed typo on README.
+- Fixed a bug on spelling suggestion check when using pagination.
