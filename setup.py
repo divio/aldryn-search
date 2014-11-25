@@ -5,9 +5,11 @@ from setuptools import setup, find_packages
 install_requires = [
     'setuptools',
     'Django>=1.4',
+    'django-appconf',
     'django-cms>=2.4',
     'django-classy-tags>=0.3.2',
     'django-haystack>=2.0.0',
+    'django-spurl',
     'django-standard-form',
     'aldryn-common',
 ]
