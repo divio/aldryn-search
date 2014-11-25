@@ -13,3 +13,9 @@ class LanguageRouter(routers.BaseRouter):
         if language not in settings.HAYSTACK_CONNECTIONS:
             return DEFAULT_ALIAS
         return language
+
+    def for_write(self, **hints):
+        language = get_language()
+        if language not in settings.HAYSTACK_CONNECTIONS:
+            return DEFAULT_ALIAS
+        return language
