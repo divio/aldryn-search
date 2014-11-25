@@ -34,3 +34,8 @@
 - Fixed TypeError when rebuilding page index on cms 2.4
 - Fixed typo on README.
 - Fixed a bug on spelling suggestion check when using pagination.
+
+==== 0.2.4 (2014-11-24) ====
+
+- Added missing requirements to setup.py (issue #23)
+- Added for_write router. Fixes issues on single object updates.
