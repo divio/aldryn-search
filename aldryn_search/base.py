@@ -9,7 +9,7 @@ from .helpers import get_request
 from .utils import clean_join, _get_language_from_alias_func
 
 
-language_from_alias = _get_language_from_alias_func(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
+language_from_alias = _get_language_from_alias_func()
 
 
 class AbstractIndex(indexes.SearchIndex):

@@ -45,10 +45,12 @@ def get_callable(string_or_callable):
         return getattr(module, object_name)
 
 
-def _get_language_from_alias_func(path_or_callable):
+def _get_language_from_alias_func():
+    path_or_callable = settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS
+
     if path_or_callable:
         try:
-            func = get_callable(settings.ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS)
+            func = get_callable(path_or_callable)
         except AttributeError as error:
             raise ImproperlyConfigured('ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS: %s' % (str(error)))
         if not callable(func):
