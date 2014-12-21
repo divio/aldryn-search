@@ -3,7 +3,10 @@ import re
 import six
 
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.encoding import force_unicode
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode
 from django.utils.importlib import import_module
 
 from haystack import DEFAULT_ALIAS
