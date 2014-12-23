@@ -3,7 +3,10 @@ from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.test import RequestFactory
 from django.utils.text import smart_split
-from django.utils.encoding import force_unicode
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode
 
 from .conf import settings
 from .utils import strip_tags
