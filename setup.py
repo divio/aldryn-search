@@ -3,6 +3,7 @@ import metadata as m
 from setuptools import setup, find_packages
 
 install_requires = [
+    'lxml',
     'setuptools',
     'Django>=1.4',
     'django-appconf',

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
-import re
-
 import six
+
+from lxml.html.clean import Cleaner as LxmlCleaner
 
 from django.core.exceptions import ImproperlyConfigured
 try:
@@ -12,6 +11,7 @@ try:
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
 from django.utils.importlib import import_module
+from django.utils.html import strip_tags as _strip_tags
 
 from haystack import DEFAULT_ALIAS
 from haystack.indexes import SearchIndex
@@ -105,9 +105,12 @@ def get_model_path(model_or_string):
 def strip_tags(value):
     """
     Returns the given HTML with all tags stripped.
-
-    This is a copy of django.utils.html.strip_tags, except that it adds some
-    whitespace in between replaced tags to make sure words are not erroneously
-    concatenated.
+    We use lxml to strip all js tags and then hand the result to django's strip tags.
     """
-    return re.sub(r'<[^>]*?>', ' ', force_unicode(value))
+    # strip any new lines
+    value = value.strip()
+
+    if value:
+        partial_strip = LxmlCleaner().clean_html(value)
+        value = _strip_tags(partial_strip)
+    return value

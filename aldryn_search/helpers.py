@@ -12,13 +12,22 @@ from .conf import settings
 from .utils import strip_tags
 
 
+def get_cleaned_bits(data):
+    decoded = force_unicode(data)
+    stripped = strip_tags(decoded)
+    return smart_split(stripped)
+
+
 def get_plugin_index_data(base_plugin, request):
     text_bits = []
+
     instance, plugin_type = base_plugin.get_plugin_instance()
 
     if instance is None:
         # this is an empty plugin
         return text_bits
+
+    search_fields = getattr(instance, 'search_fields', [])
 
     if hasattr(instance, 'search_fulltext'):
         # check if the plugin instance has search enabled
@@ -30,24 +39,22 @@ def get_plugin_index_data(base_plugin, request):
         # last check in the plugin class (CMSPluginBase)
         search_contents = plugin_type.search_fulltext
     else:
-        # enable by default
-        search_contents = True
-
-    for field in getattr(instance, 'search_fields', []):
-        field_content = strip_tags(getattr(instance, field, ''))
-
-        if field_content:
-            field_content = force_unicode(field_content)
-            text_bits.extend(smart_split(field_content))
+        # disabled if there's search fields defined,
+        # otherwise it's enabled.
+        search_contents = not bool(search_fields)
 
     if search_contents:
         plugin_contents = instance.render_plugin(context=RequestContext(request))
 
         if plugin_contents:
-            plugin_contents = strip_tags(plugin_contents)
-            text_bits.extend(smart_split(plugin_contents))
+            text_bits = get_cleaned_bits(plugin_contents)
+    else:
+        values = (getattr(instance, field, '') for field in search_fields)
 
-    return  text_bits
+        for value in values:
+            cleaned_bits = get_cleaned_bits(value or '')
+            text_bits.extend(cleaned_bits)
+    return text_bits
 
 
 def get_request(language=None):
