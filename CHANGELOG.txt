@@ -39,3 +39,8 @@
 
 - Added missing requirements to setup.py (issue #23)
 - Added for_write router. Fixes issues on single object updates.
+
+==== 0.2.5 (2015-01-27) ====
+
+- Fixed issue with javascript not being stripped correctly.
+- Fixed duplicate content issue when indexing a plugin that set search_fields.
