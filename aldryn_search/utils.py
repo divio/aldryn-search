@@ -6,6 +6,7 @@ import six
 from lxml.html.clean import Cleaner as LxmlCleaner
 
 from django.core.exceptions import ImproperlyConfigured
+from django.db import models
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
@@ -91,6 +92,30 @@ def language_from_alias(alias):
     languages = [language[0] for language in settings.LANGUAGES]
 
     return alias if alias in languages else None
+
+
+def get_field_value(obj, name):
+    """
+    Given a model instance and a field name (or attribute),
+    returns the value of the field or an empty string.
+    """
+    fields = name.split('__')
+
+    name = fields[0]
+
+    try:
+        obj._meta.get_field(name)
+    except (AttributeError, models.FieldDoesNotExist):
+        # we catch attribute error because obj will not always be a model
+        # specially when going through multiple relationships.
+        value = getattr(obj, name, None) or ''
+    else:
+        value = getattr(obj, name)
+
+    if len(fields) > 1:
+        remaining = '__'.join(fields[1:])
+        return get_field_value(value, remaining)
+    return value
 
 
 def get_model_path(model_or_string):

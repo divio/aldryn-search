@@ -9,7 +9,7 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 from .conf import settings
-from .utils import strip_tags
+from .utils import get_field_value, strip_tags
 
 
 def get_cleaned_bits(data):
@@ -49,7 +49,7 @@ def get_plugin_index_data(base_plugin, request):
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)
     else:
-        values = (getattr(instance, field, '') for field in search_fields)
+        values = (get_field_value(instance, field) for field in search_fields)
 
         for value in values:
             cleaned_bits = get_cleaned_bits(value or '')
