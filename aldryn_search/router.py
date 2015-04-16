@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.utils.translation import get_language
-from cms.utils.i18n import alias_from_language
 
 from haystack import routers
 from haystack.constants import DEFAULT_ALIAS
+
+from .utils import alias_from_language
 
 
 class LanguageRouter(routers.BaseRouter):
