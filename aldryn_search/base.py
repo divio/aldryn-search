@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import warnings
+from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import override
 
 from haystack import indexes
@@ -116,7 +117,10 @@ class AldrynIndexBase(AbstractIndex):
         """
         Equivalent to self.prepare_url.
         """
-        return obj.get_absolute_url()
+        try:
+            return obj.get_absolute_url()
+        except Exception:
+            return None
 
     def get_title(self, obj):
         """
@@ -142,4 +146,6 @@ class AldrynIndexBase(AbstractIndex):
         if self.index_title or getattr(self, 'INDEX_TITLE', False):
             prepared_text = self.prepared_data['text']
             prepared_title = self.prepared_data['title']
-            self.prepared_data['text'] = clean_join(' ', [prepared_title, prepared_text])
+            self.prepared_data['text'] = clean_join(
+                ' ', [prepared_title, prepared_text]
+            )

@@ -138,6 +138,8 @@ def strip_tags(value):
 
     if isinstance(value, six.string_types):
         value = value.strip()
-        partial_strip = LxmlCleaner().clean_html(value)
-        value = _strip_tags(partial_strip)
+        if value:
+            partial_strip = LxmlCleaner().clean_html(value)
+            value = _strip_tags(partial_strip)
+            return value.strip()  # clean cases we have <div>\n\n</div>
     return value

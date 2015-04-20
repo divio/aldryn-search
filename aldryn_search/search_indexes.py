@@ -49,8 +49,14 @@ class TitleIndex(get_index_base()):
         text_bits = []
 
         for base_plugin in plugins:
-            plugin_text_content = self.get_plugin_search_text(base_plugin, request)
-            text_bits.append(plugin_text_content)
+            try:
+                plugin_text_content = self.get_plugin_search_text(base_plugin, request)
+                text_bits.append(plugin_text_content)
+            except Exception:
+                # do not fail if some plugin has issues, so at least title and plugins that not
+                # fail is indexed
+                # TODO: add logging
+                pass
 
         page_meta_description = current_page.get_meta_description(fallback=False, language=language)
 
