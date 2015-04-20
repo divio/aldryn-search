@@ -117,10 +117,7 @@ class AldrynIndexBase(AbstractIndex):
         """
         Equivalent to self.prepare_url.
         """
-        try:
-            return obj.get_absolute_url()
-        except Exception:
-            return None
+        return obj.get_absolute_url()
 
     def get_title(self, obj):
         """
