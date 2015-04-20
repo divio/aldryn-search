@@ -130,12 +130,14 @@ def get_model_path(model_or_string):
 def strip_tags(value):
     """
     Returns the given HTML with all tags stripped.
-    We use lxml to strip all js tags and then hand the result to django's strip tags.
+    We use lxml to strip all js tags and then hand the result to django's
+    strip tags. If value isn't valid, just return value since there is
+    no tags to strip.
     """
     # strip any new lines
-    value = value.strip()
 
-    if value:
+    if isinstance(value, six.string_types):
+        value = value.strip()
         partial_strip = LxmlCleaner().clean_html(value)
         value = _strip_tags(partial_strip)
     return value
