@@ -142,4 +142,6 @@ class AldrynIndexBase(AbstractIndex):
         if self.index_title or getattr(self, 'INDEX_TITLE', False):
             prepared_text = self.prepared_data['text']
             prepared_title = self.prepared_data['title']
-            self.prepared_data['text'] = clean_join(' ', [prepared_title, prepared_text])
+            self.prepared_data['text'] = clean_join(
+                ' ', [prepared_title, prepared_text]
+            )
