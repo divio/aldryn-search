@@ -1,11 +1,37 @@
-==== 0.1.2 (2013-08-07) ====
-==== 0.1.3 (2013-11-11) ====
-==== 0.1.4 (2014-01-29) ====
-==== 0.1.5 (2014-01-29) ====
-==== 0.1.6 (2014-01-30) ====
-==== 0.1.7 (2014-03-20) ====
-==== 0.1.8 (2014-05-16) ====
-==== 0.1.9 (2014-05-17) ====
+
+
+==== 0.2.7 (2015-04-16) ====
+
+- Fixed a issue with get_language return wrong language in indexing
+
+==== 0.2.6 (2015-01-27) ====
+
+- Fixed issue with search_fields not following relationships.
+
+==== 0.2.5 (2015-01-27) ====
+
+- Fixed issue with javascript not being stripped correctly.
+- Fixed duplicate content issue when indexing a plugin that set search_fields.
+
+==== 0.2.4 (2014-11-24) ====
+
+- Added missing requirements to setup.py (issue #23)
+- Added for_write router. Fixes issues on single object updates.
+
+==== 0.2.3 (2014-09-30) ====
+
+- Fixed TypeError when rebuilding page index on cms 2.4
+- Fixed typo on README.
+- Fixed a bug on spelling suggestion check when using pagination.
+
+==== 0.2.2 (2014-08-06) ====
+
+- Fixed bug in get_model_path utility. issue #19
+
+==== 0.2.1 (2014-07-24) ====
+
+- Fixed bug in form handling on search view.
+
 ==== 0.2.0 (2014-07-x) ====
 
 - Removed contrib.pagination.DiggPaginator (use aldryn_common.paginator.DiggPaginator)
@@ -23,34 +49,11 @@
 - Renamed INDEX_TITLE to index_title to keep the same format as haystack.
 - Refactored plugin data indexing to split on whitespace, thus reducing index size.
 
-==== 0.2.1 (2014-07-24) ====
-
-- Fixed bug in form handling on search view.
-
-==== 0.2.2 (2014-08-06) ====
-
-- Fixed bug in get_model_path utility. issue #19
-
-==== 0.2.3 (2014-09-30) ====
-
-- Fixed TypeError when rebuilding page index on cms 2.4
-- Fixed typo on README.
-- Fixed a bug on spelling suggestion check when using pagination.
-
-==== 0.2.4 (2014-11-24) ====
-
-- Added missing requirements to setup.py (issue #23)
-- Added for_write router. Fixes issues on single object updates.
-
-==== 0.2.5 (2015-01-27) ====
-
-- Fixed issue with javascript not being stripped correctly.
-- Fixed duplicate content issue when indexing a plugin that set search_fields.
-
-==== 0.2.6 (2015-01-27) ====
-
-- Fixed issue with search_fields not following relationships.
-
-==== 0.2.7 (2015-04-16) ====
-
-- Fixed a issue with get_language return wrong language in indexing
+==== 0.1.9 (2014-05-17) ====
+==== 0.1.8 (2014-05-16) ====
+==== 0.1.7 (2014-03-20) ====
+==== 0.1.6 (2014-01-30) ====
+==== 0.1.5 (2014-01-29) ====
+==== 0.1.4 (2014-01-29) ====
+==== 0.1.3 (2013-11-11) ====
+==== 0.1.2 (2013-08-07) ====
