@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import warnings
-from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import override
 
 from haystack import indexes
