@@ -134,12 +134,20 @@ def strip_tags(value):
     strip tags. If value isn't valid, just return value since there is
     no tags to strip.
     """
-    # strip any new lines
+    # borrowed from aldryn-search
 
     if isinstance(value, six.string_types):
         value = value.strip()
-        if value:
+
+        if not value:
+            return
+
+        try:
             partial_strip = LxmlCleaner().clean_html(value)
-            value = _strip_tags(partial_strip)
-            return value.strip()  # clean cases we have <div>\n\n</div>
+        except ParserError:
+            # error could occur because of invalid html document
+            # we don't want to return empty handed.
+            partial_strip = value
+        value = _strip_tags(partial_strip)
+        return value.strip()  # clean cases we have <div>\n\n</div>
     return value
