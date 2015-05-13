@@ -3,10 +3,18 @@ import warnings
 from django.utils.translation import override
 
 from haystack import indexes
+from haystack.exceptions import DoNotIndex
 
 from .conf import settings
 from .helpers import get_request
 from .utils import clean_join, _get_language_from_alias_func
+
+try:
+    from aldryn_apphooks_config.utils import get_apphook_field_names
+    from cms.models import Page
+    HAS_APPCONFIG = True
+except ImportError:
+    HAS_APPCONFIG = False
 
 
 language_from_alias = _get_language_from_alias_func()
@@ -130,7 +138,30 @@ class AldrynIndexBase(AbstractIndex):
         """
         return None
 
+    def check_for_app_config(self, obj):
+        """
+        This should check for app_config in object and if it exists check
+        if app_config namespace exists in some page. If app_config exists
+        and namespace does not exists in pages we should skip indexing for
+        this object. If app_config does not exists for given object or we
+        can't import appconfig stuff, just ignore.
+        """
+        if HAS_APPCONFIG:
+            apphook_field_names = get_apphook_field_names(obj)
+            results = []
+
+            for field_name in apphook_field_names:
+                app_config = getattr(obj, field_name)
+                if app_config:
+                    pages = Page.objects.public().filter(
+                        application_namespace=app_config.namespace
+                    )
+                    results.append(pages.exists())
+            if not any(results):
+                raise DoNotIndex
+
     def prepare_fields(self, obj, language, request):
+        self.check_for_app_config(obj)
         self.prepared_data['language'] = language
         # We set the following fields here because on some models,
         # the value of these fields is dependent on the active language
