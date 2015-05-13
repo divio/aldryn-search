@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import six
 
 from lxml.html.clean import Cleaner as LxmlCleaner
+from lxml.etree import ParseError
+
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
@@ -134,19 +136,14 @@ def strip_tags(value):
     strip tags. If value isn't valid, just return value since there is
     no tags to strip.
     """
-    # borrowed from aldryn-search
-
     if isinstance(value, six.string_types):
         value = value.strip()
 
-        if not value:
-            return
-
         try:
             partial_strip = LxmlCleaner().clean_html(value)
-        except ParserError:
-            # error could occur because of invalid html document
-            # we don't want to return empty handed.
+        except ParseError:
+            # Error could occur because of invalid html document,
+            # including '' values. We don't want to return empty handed.
             partial_strip = value
         value = _strip_tags(partial_strip)
         return value.strip()  # clean cases we have <div>\n\n</div>
