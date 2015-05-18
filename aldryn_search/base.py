@@ -138,6 +138,30 @@ class AldrynIndexBase(AbstractIndex):
         """
         return None
 
+    def prepare_fields(self, obj, language, request):
+        self.prepared_data['language'] = language
+        # We set the following fields here because on some models,
+        # the value of these fields is dependent on the active language
+        # this being the case we extrapolate the language hacks.
+        self.prepared_data['url'] = self.get_url(obj)
+        self.prepared_data['title'] = self.get_title(obj)
+        self.prepared_data['description'] = self.get_description(obj)
+
+        if self.index_title or getattr(self, 'INDEX_TITLE', False):
+            prepared_text = self.prepared_data['text']
+            prepared_title = self.prepared_data['title']
+            self.prepared_data['text'] = clean_join(
+                ' ', [prepared_title, prepared_text]
+            )
+
+
+class AldrynAppconfigIndexBase(AldrynIndexBase):
+
+    """
+    This class add a check for objects that have app config instances related
+    to it.
+    """
+
     def check_for_app_config(self, obj):
         """
         This should check for app_config in object and if it exists check
@@ -162,17 +186,6 @@ class AldrynIndexBase(AbstractIndex):
 
     def prepare_fields(self, obj, language, request):
         self.check_for_app_config(obj)
-        self.prepared_data['language'] = language
-        # We set the following fields here because on some models,
-        # the value of these fields is dependent on the active language
-        # this being the case we extrapolate the language hacks.
-        self.prepared_data['url'] = self.get_url(obj)
-        self.prepared_data['title'] = self.get_title(obj)
-        self.prepared_data['description'] = self.get_description(obj)
-
-        if self.index_title or getattr(self, 'INDEX_TITLE', False):
-            prepared_text = self.prepared_data['text']
-            prepared_title = self.prepared_data['title']
-            self.prepared_data['text'] = clean_join(
-                ' ', [prepared_title, prepared_text]
-            )
+        return super(AldrynAppconfigIndexBase, self).prepare_fields(
+            obj, language, request
+        )
