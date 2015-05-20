@@ -9,14 +9,14 @@ INSTALL_REQUIRES = [
     'django-appconf',
     'django-cms>=2.4',
     'django-classy-tags>=0.3.2',
-    'django-haystack>2.3.1,<2.4.0',
+    'django-haystack',
     'django-spurl',
     'django-standard-form',
     'aldryn-common',
 ]
 
 DEPENDENCY_LINKS = [
-    'https://github.com/chronossc/django-haystack/archive/2.3.x.zip#egg=django-haystack-2.3.2.dev0'  # NOQA
+    'https://github.com/chronossc/django-haystack/archive/2.3.x.zip#egg=django-haystack'  # NOQA
 ]
 
 setup(
