@@ -91,6 +91,16 @@ anytime in it's prepare proccess.
 
 To use this new django-haystack feature, just raise ``haystack.exceptions.DoNotIndex`` in ``prepare`` methods.
 
+Dependencies
+------------
+
+When installing from a requirements.txt file please add following lines to it::
+
+    https://github.com/chronossc/django-haystack/archive/2.3.x.zip#egg=django-haystack-2.3.2.dev0
+    https://github.com/aldryn/aldryn-search/archive/feature/donotindex_appconfig_without_pages.zip#egg=aldryn-search
+
+This is required by ``pip>=1.5`` which deprecate dependency links.
+
 AldrynAppconfigIndexBase
 ------------------------
 
