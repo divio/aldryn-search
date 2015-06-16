@@ -83,10 +83,39 @@ Results are paginated according to the ``ALDRYN_SEARCH_PAGINATION`` setting (def
 If set to ``None`` pagination is disabled.
 
 Extra feature
-=============
+=======
 
-django-haystack 2.4.0 will add a new feature that allows us to skip objects from being indexed in any point when preparing data to be indexed.
+This branch adds a feature planed for django-haystack-2.4.0, backported to 2.3.x branch.
+It uses a custom branch of django-haystack that adds support to skip the indexing of an object
+anytime in it's prepare proccess.
 
-This feature was backported to 2.3.x versions and live in https://github.com/chronossc/django-haystack/tree/2.3.x.
+To use this new django-haystack feature, just raise ``haystack.exceptions.DoNotIndex`` in ``prepare`` methods.
 
-Aldryn Search is using this feature in ``feature/donotindex_appconfig_without_pages`` branch to skip objects that has app config namespaces that are not related to any public page.
+Dependencies
+------------
+
+When installing from a requirements.txt file please add following lines to it::
+
+    https://github.com/chronossc/django-haystack/archive/2.3.x.zip#egg=django-haystack
+    https://github.com/aldryn/aldryn-search/archive/feature/donotindex_appconfig_without_pages.zip#egg=aldryn-search
+
+This is required by ``pip>=1.5`` which deprecate dependency links.
+
+AldrynAppconfigIndexBase
+------------------------
+
+Due to how django url resolution works, we can index objects with wrong url. Example:
+
+* For aldryn-newsblog we have following ``NewsBlogConfig`` namespaces: 'foo' and 'bar'.
+* We have a Page with ``application_namespace = 'bar'`` and ``application_urls = 'NewsBlogApp'``.
+* We have the ``<Article 1>`` with ``app_config.namespace = 'foo'``.
+
+When indexing we get ``<Article 1>.get_absolute_url()`` and because it's namespace is ``foo`` and we does not have a newsblog page with ``application_namespace = 'foo'`` it will return url for page with ``application_namespace = 'bar'``.
+
+This will lead to Http 404 error because when newsblog filter the articles it will look for ``bar`` namespace instead ``foo``.
+
+This indexer will skip from indexing objects with namespaces that are not
+related to any published page to avoid index of these entries.
+
+To use that set ``ALDRYN_SEARCH_INDEX_BASE_CLASS`` to ``aldryn_search.base.AldrynAppconfigIndexBase``
+or inherit your ``BaseSearch`` from that class.
