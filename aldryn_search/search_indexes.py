@@ -43,8 +43,29 @@ class TitleIndex(get_index_base()):
         return queryset
 
     def get_search_data(self, obj, language, request):
+        """
+        In the project settings set up the variable
+
+        PLACEHOLDERS_SEARCH_LIST = {
+                'page_title': [ 'placeholder_1', 'placeholder_2', etc. ],
+            }
+
+        or leave it empty
+
+        PLACEHOLDERS_SEARCH_LIST = {}
+        """
         current_page = obj.page
-        placeholders = current_page.placeholders.all()
+        page_title = current_page.get_title()
+        args = {}
+
+        try:
+            placeholders_by_page = settings.PLACEHOLDERS_SEARCH_LIST
+        except AttributeError:
+            placeholders_by_page = {}
+
+        if placeholders_by_page and page_title in placeholders_by_page:
+            args['slot__in'] = placeholders_by_page[page_title]
+        placeholders = current_page.placeholders.all().filter(**args)
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text_bits = []
 
