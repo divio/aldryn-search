@@ -2,6 +2,7 @@ from django.template import Template
 from django.test import TestCase
 from django.test.utils import override_settings
 
+from cms.api import create_page
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from cms.models.placeholdermodel import Placeholder
@@ -81,7 +82,6 @@ class PluginIndexingTests(TestCase):
 
     def test_page_title_is_indexed_using_prepare(self):
         """This tests the indexing path way used by update_index mgmt command"""
-        from cms.api import create_page
         page = create_page(title="Whoopee", template="whee.html", language="en")
 
         from haystack import connections
@@ -100,7 +100,6 @@ class PluginIndexingTests(TestCase):
 
     def test_page_title_is_indexed_using_update_object(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
-        from cms.api import create_page
         page = create_page(title="Whoopee", template="whee.html", language="en")
 
         from haystack import connections
