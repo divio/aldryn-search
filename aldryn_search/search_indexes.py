@@ -79,3 +79,6 @@ class TitleIndex(get_index_base()):
             language=language
         ).select_related('page').distinct()
         return queryset
+
+    def should_update(self, instance, **kwargs):
+        return not instance.publisher_is_draft
