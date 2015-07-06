@@ -1,4 +1,8 @@
 
+==== 0.2.8 (2015-07-06) ====
+
+- Fixed issues with strip_tags
+- Fixed issue where the non-public version of a title was being indexed.
 
 ==== 0.2.7 (2015-04-16) ====
 
