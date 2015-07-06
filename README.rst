@@ -81,12 +81,3 @@ Pagination
 
 Results are paginated according to the ``ALDRYN_SEARCH_PAGINATION`` setting (default: 10).
 If set to ``None`` pagination is disabled.
-
-Extra feature
-=============
-
-django-haystack 2.4.0 will add a new feature that allows us to skip objects from being indexed in any point when preparing data to be indexed.
-
-This feature was backported to 2.3.x versions and live in https://github.com/chronossc/django-haystack/tree/2.3.x.
-
-Aldryn Search is using this feature in ``feature/donotindex_appconfig_without_pages`` branch to skip objects that has app config namespaces that are not related to any public page.
