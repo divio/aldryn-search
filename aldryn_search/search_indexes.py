@@ -47,7 +47,7 @@ class TitleIndex(get_index_base()):
         In the project settings set up the variable
 
         PLACEHOLDERS_SEARCH_LIST = {
-                'page_title': [ 'placeholder_1', 'placeholder_2', etc. ],
+                'reverse_id': [ 'placeholder_1', 'placeholder_2', etc. ],
             }
 
         or leave it empty
