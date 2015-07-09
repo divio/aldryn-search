@@ -11,7 +11,6 @@ from aldryn_search.search_indexes import TitleIndex
 from .helpers import get_plugin_index_data, get_request
 
 
-
 class FakeTemplateLoader(object):
     is_usable = True
 
@@ -47,7 +46,7 @@ class PluginIndexingTests(TestCase):
             placeholder=Placeholder(id=1235)
         )
         instance.cmsplugin_ptr = instance
-        instance.pk = 1234 # otherwise plugin_meta_context_processor() crashes
+        instance.pk = 1234  # otherwise plugin_meta_context_processor() crashes
         return instance
 
     def test_plugin_indexing_is_enabled_by_default(self):
@@ -82,7 +81,7 @@ class PluginIndexingTests(TestCase):
         index = unified_index.get_index(Title)
 
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
-        index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
         indexed = index.prepare(title)
         self.assertEqual('home', indexed['title'])
         self.assertEqual('home', indexed['text'])
