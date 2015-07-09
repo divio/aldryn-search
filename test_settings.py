@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 HAYSTACK_CONNECTIONS = {
-'default': {
+    'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
         'URL': 'http://localhost:9001/solr/default',
         'TIMEOUT': 60 * 5,
