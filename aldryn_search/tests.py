@@ -1,7 +1,7 @@
 from django.template import Template
 from django.test import TestCase
 
-from cms.api import create_page, add_plugin
+from cms.api import create_page
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from cms.models.placeholdermodel import Placeholder
