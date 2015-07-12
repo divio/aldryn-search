@@ -11,9 +11,12 @@ from .conf import settings
 
 class AldrynSearchApphook(CMSApp):
     name = _("aldryn search")
-    urls = [patterns('',
-        url('^$', AldrynSearchView.as_view(), name='aldryn-search'),
-    ),]
+    urls = [
+        patterns(
+            '',
+            url('^$', AldrynSearchView.as_view(), name='aldryn-search'),
+        )
+    ]
 
 
 if settings.ALDRYN_SEARCH_REGISTER_APPHOOK:
