@@ -6,12 +6,10 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from cms.models.placeholdermodel import Placeholder
 from cms.models import CMSPlugin
-from cms.test_utils.testcases import (CMSTestCase, URL_CMS_PLUGIN_EDIT)
-from cms.utils import get_cms_setting
 
 from aldryn_search.search_indexes import TitleIndex
 from .helpers import get_plugin_index_data, get_request
-from django.conf import settings
+
 
 class FakeTemplateLoader(object):
     is_usable = True
@@ -119,7 +117,6 @@ class PluginIndexingTests(TestCase):
 class PluginFilterIndexingTests(TestCase):
 
     def setUp(self):
-        self.index = TitleIndex()
         self.request = get_request(language='en')
 
     def test_page_title_is_indexed_using_prepare_with_filter_option(self):
@@ -163,7 +160,6 @@ class PluginFilterIndexingTests(TestCase):
 class PluginExcludeAndFilterIndexingTests(TestCase):
 
     def setUp(self):
-        self.index = TitleIndex()
         self.request = get_request(language='en')
 
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option(self):
@@ -207,7 +203,6 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
 class PluginExcludeAndFilterIndexingTests2(TestCase):
 
     def setUp(self):
-        self.index = TitleIndex()
         self.request = get_request(language='en')
 
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option(self):
