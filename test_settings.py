@@ -24,6 +24,12 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HELPER_SETTINGS = {
+    'TEMPLATE_DIRS': ('aldryn_search/tests_data/templates/',),
+    'CMS_TEMPLATES': (
+        ('fullwidth.html', 'Fullwidth'),
+        ('page.html', 'Normal page'),
+        ('test.html', 'Normal page2'),
+    ),
     'ALLOWED_HOSTS': ['localhost'],
     'CMS_LANGUAGES': {1: [{'code': 'en', 'name': 'English'}]},
     'LANGUAGES': (('en', 'English'),),
@@ -36,9 +42,13 @@ HELPER_SETTINGS = {
     },
     'PLACEHOLDERS_SEARCH_LIST': {
         '*': [],
-        'testpage': ['content',],
+        'testpage': ['content'],
         'testpage2': [],
-        'testpage3': ['-content'],
+        'testpage3': ['-content', '-hidden_content'],
+        'testpage4': ['content', '-hidden_content'],
+        'testpage5': ['-content', 'hidden_content'],
+        'testpage6': ['content', 'hidden_content'],
+        'testpage7': ['hidden_content'],
     },
 }
 

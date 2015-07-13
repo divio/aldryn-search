@@ -121,8 +121,10 @@ class PluginFilterIndexingTests(TestCase):
 
     def test_page_title_is_indexed_using_prepare_with_filter_option(self):
         """This tests the indexing path way used by update_index mgmt command"""
-        page = create_page(title="test_page", reverse_id='testpage', template="page.html", language="en")
+        page = create_page(title="test_page", reverse_id='testpage', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -140,8 +142,10 @@ class PluginFilterIndexingTests(TestCase):
 
     def test_page_title_is_indexed_using_update_object_with_filter_option(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
-        page = create_page(title="test_page", reverse_id='testpage', template="page.html", language="en")
+        page = create_page(title="test_page", reverse_id='testpage', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -157,15 +161,18 @@ class PluginFilterIndexingTests(TestCase):
         self.assertEqual('test_page', indexed['title'])
         self.assertEqual('test_page rendered plugin content', indexed['text'])
 
-class PluginExcludeAndFilterIndexingTests(TestCase):
+
+class PluginExcludeAndFilterIndexingTests2(TestCase):
 
     def setUp(self):
         self.request = get_request(language='en')
 
-    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option(self):
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option2(self):
         """This tests the indexing path way used by update_index mgmt command"""
-        page = create_page(title="test_page2", reverse_id='testpage2', template="page.html", language="en")
+        page = create_page(title="test_page2", reverse_id='testpage2', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -181,10 +188,12 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
         self.assertEqual('test_page2', indexed['title'])
         self.assertEqual('test_page2', indexed['text'])
 
-    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option(self):
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option2(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
-        page = create_page(title="test_page2", reverse_id='testpage2', template="page.html", language="en")
+        page = create_page(title="test_page2", reverse_id='testpage2', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -200,10 +209,18 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
         self.assertEqual('test_page2', indexed['title'])
         self.assertEqual('test_page2', indexed['text'])
 
-    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option(self):
+
+class PluginExcludeAndFilterIndexingTests3(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option3(self):
         """This tests the indexing path way used by update_index mgmt command"""
-        page = create_page(title="test_page3", reverse_id='testpage3', template="page.html", language="en")
+        page = create_page(title="test_page3", reverse_id='testpage3', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -219,10 +236,12 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
         self.assertEqual('test_page3', indexed['title'])
         self.assertEqual('test_page3', indexed['text'])
 
-    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option(self):
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option3(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
-        page = create_page(title="test_page3", reverse_id='testpage3', template="page.html", language="en")
+        page = create_page(title="test_page3", reverse_id='testpage3', template="test.html", language="en")
         plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -238,3 +257,242 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
         self.assertEqual('test_page3', indexed['title'])
         self.assertEqual('test_page3', indexed['text'])
 
+
+class PluginExcludeAndFilterIndexingTests4(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option4(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        page = create_page(title="test_page4", reverse_id='testpage4', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('test_page4', indexed['title'])
+        self.assertEqual('test_page4 rendered plugin content', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option4(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        page = create_page(title="test_page4", reverse_id='testpage4', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('test_page4', indexed['title'])
+        self.assertEqual('test_page4 rendered plugin content', indexed['text'])
+
+
+class PluginExcludeAndFilterIndexingTests5(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option5(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        page = create_page(title="test_page5", reverse_id='testpage5', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('test_page5', indexed['title'])
+        self.assertEqual('test_page5 never search for this content', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option5(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        page = create_page(title="test_page5", reverse_id='testpage5', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('test_page5', indexed['title'])
+        self.assertEqual('test_page5 never search for this content', indexed['text'])
+
+
+class PluginExcludeAndFilterIndexingTests6(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option6(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        page = create_page(title="test_page6", reverse_id='testpage6', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('test_page6', indexed['title'])
+        self.assertEqual('test_page6 rendered plugin content never search for this content', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option6(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        page = create_page(title="test_page6", reverse_id='testpage6', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('test_page6', indexed['title'])
+        self.assertEqual('test_page6 rendered plugin content never search for this content', indexed['text'])
+
+
+class PluginExcludeAndFilterIndexingTests7(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option7(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        page = create_page(title="test_page7", reverse_id='testpage7', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('test_page7', indexed['title'])
+        self.assertEqual('test_page7 never search for this content', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option7(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        page = create_page(title="test_page7", reverse_id='testpage7', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('test_page7', indexed['title'])
+        self.assertEqual('test_page7 never search for this content', indexed['text'])
+
+
+class PluginExcludeAndFilterIndexingTests8(TestCase):
+
+    def setUp(self):
+        self.request = get_request(language='en')
+
+    def test_page_title_is_indexed_using_prepare_with_excluding_filter_option8(self):
+        """This tests the indexing path way used by update_index mgmt command"""
+        page = create_page(title="test_page8", reverse_id='testpage8', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
+        indexed = index.prepare(title)
+        self.assertEqual('test_page8', indexed['title'])
+        self.assertEqual('test_page8', indexed['text'])
+
+    def test_page_title_is_indexed_using_update_object_with_excluding_filter_option8(self):
+        """This tests the indexing path way used by the RealTimeSignalProcessor"""
+        page = create_page(title="test_page8", reverse_id='testpage8', template="test.html", language="en")
+        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+
+
+        from haystack import connections
+        from haystack.constants import DEFAULT_ALIAS
+        search_conn = connections[DEFAULT_ALIAS]
+        unified_index = search_conn.get_unified_index()
+
+        from cms.models import Title
+        index = unified_index.get_index(Title)
+
+        title = Title.objects.get(pk=page.title_set.all()[0].pk)
+        index.update_object(title, using=DEFAULT_ALIAS)
+        indexed = index.prepared_data
+        self.assertEqual('test_page8', indexed['title'])
+        self.assertEqual('test_page8', indexed['text'])
