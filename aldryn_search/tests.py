@@ -200,11 +200,6 @@ class PluginExcludeAndFilterIndexingTests(TestCase):
         self.assertEqual('test_page2', indexed['title'])
         self.assertEqual('test_page2', indexed['text'])
 
-class PluginExcludeAndFilterIndexingTests2(TestCase):
-
-    def setUp(self):
-        self.request = get_request(language='en')
-
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page3", reverse_id='testpage3', template="page.html", language="en")
