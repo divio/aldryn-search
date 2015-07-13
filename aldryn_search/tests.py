@@ -1,6 +1,5 @@
 from django.template import Template
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from cms.api import create_page
 from cms.plugin_base import CMSPluginBase
@@ -10,16 +9,6 @@ from cms.models import CMSPlugin
 
 from aldryn_search.search_indexes import TitleIndex
 from .helpers import get_plugin_index_data, get_request
-
-
-test_settings = {
-    'ALLOWED_HOSTS': ['localhost'],
-    'CMS_LANGUAGES': {1: [{'code': 'en', 'name': 'English'}]},
-    'CMS_TEMPLATES': (("whee.html", "Whee Template"),),
-    'LANGUAGES': (('en', 'English'),),
-    'LANGUAGE_CODE': 'en',
-    'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
-}
 
 
 class FakeTemplateLoader(object):
@@ -44,7 +33,6 @@ class NotIndexedPlugin(CMSPluginBase):
 plugin_pool.register_plugin(NotIndexedPlugin)
 
 
-@override_settings(**test_settings)
 class PluginIndexingTests(TestCase):
 
     def setUp(self):
@@ -58,7 +46,7 @@ class PluginIndexingTests(TestCase):
             placeholder=Placeholder(id=1235)
         )
         instance.cmsplugin_ptr = instance
-        instance.pk = 1234 # otherwise plugin_meta_context_processor() crashes
+        instance.pk = 1234  # otherwise plugin_meta_context_processor() crashes
         return instance
 
     def test_plugin_indexing_is_enabled_by_default(self):
@@ -82,7 +70,7 @@ class PluginIndexingTests(TestCase):
 
     def test_page_title_is_indexed_using_prepare(self):
         """This tests the indexing path way used by update_index mgmt command"""
-        page = create_page(title="Whoopee", template="whee.html", language="en")
+        page = create_page(title="home", template="page.html", language="en")
 
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
@@ -93,15 +81,14 @@ class PluginIndexingTests(TestCase):
         index = unified_index.get_index(Title)
 
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
-        index.index_queryset(DEFAULT_ALIAS) # initialises index._backend_alias
+        index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
         indexed = index.prepare(title)
-        self.assertEqual('Whoopee', indexed['title'])
-        self.assertEqual('Whoopee', indexed['text'])
+        self.assertEqual('home', indexed['title'])
+        self.assertEqual('home', indexed['text'])
 
     def test_page_title_is_indexed_using_update_object(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
-        page = create_page(title="Whoopee", template="whee.html", language="en")
-
+        page = create_page(title="home", template="page.html", language="en")
         from haystack import connections
         from haystack.constants import DEFAULT_ALIAS
         search_conn = connections[DEFAULT_ALIAS]
@@ -113,5 +100,5 @@ class PluginIndexingTests(TestCase):
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
         indexed = index.prepared_data
-        self.assertEqual('Whoopee', indexed['title'])
-        self.assertEqual('Whoopee', indexed['text'])
+        self.assertEqual('home', indexed['title'])
+        self.assertEqual('home', indexed['text'])
