@@ -47,15 +47,26 @@ class TitleIndex(get_index_base()):
         In the project settings set up the variable
 
         PLACEHOLDERS_SEARCH_LIST = {
-                'reverse_id': [ 'placeholder_1', 'placeholder_2', etc. ],
-            }
+            '*': ['slot1', 'slot2', etc. ], #mandatory
+            'reverse_id_alpha': ['slot1', 'slot2', etc. ],
+            'reverse_id_beta': ['slot1', 'slot2', etc. ],
+            # exclude it from the placehoders search list
+            # (however better to remove at all to exclude it)
+            'reverse_id_empty': []
+            etc.
+        }
+
+        Put '-' (minus) before the slot string to exclude it
+
+        'slot_name' -> search for slot_name
+        '-slot_name' -> exclude slot name from the search list
 
         or leave it empty
 
         PLACEHOLDERS_SEARCH_LIST = {}
         """
         current_page = obj.page
-        page_title = current_page.get_title()
+        reverse_id = current_page.reverse_id
         args = {}
 
         try:
@@ -63,8 +74,17 @@ class TitleIndex(get_index_base()):
         except AttributeError:
             placeholders_by_page = {}
 
-        if placeholders_by_page and page_title in placeholders_by_page:
-            args['slot__in'] = placeholders_by_page[page_title]
+
+        if placeholders_by_page:
+            filter_target = None
+            if '*' in placeholders_by_page:
+                filter_target = '*'
+            if reverse_id and reverse_id in placeholders_by_page:
+                filter_target = reverse_id
+            if not filter_target:
+                raise AttributeError('Leave PLACEHOLDERS_SEARCH_LIST empty or set up at least the generic handling')
+            slots = [el for el in placeholders_by_page[filter_target] if not el.startswith('-')]
+            args['slot__in'] = slots
         placeholders = current_page.placeholders.all().filter(**args)
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text_bits = []

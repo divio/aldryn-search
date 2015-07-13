@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+gettext = lambda s: s
+
+import os
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
@@ -24,8 +28,18 @@ HELPER_SETTINGS = {
     'CMS_LANGUAGES': {1: [{'code': 'en', 'name': 'English'}]},
     'LANGUAGES': (('en', 'English'),),
     'LANGUAGE_CODE': 'en',
-    'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
+    #'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
+    'CMS_PERMISSION': True,
+    'CMS_PLACEHOLDER_CONF': {
+        'content': {},
+    },
+    'PLACEHOLDERS_SEARCH_LIST': {
+        '*': [],
+        'testpage': ['content',],
+        'testpage2': [],
+        'testpage3': ['-content'],
+    },
 }
 
 
