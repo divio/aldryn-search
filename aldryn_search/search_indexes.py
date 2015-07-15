@@ -76,15 +76,11 @@ class TitleIndex(get_index_base()):
 
         PLACEHOLDERS_SEARCH_LIST = {}
         """
-        reverse_id = getattr(page, 'reverse_id', None)
+        reverse_id = page.reverse_id
         args = []
         kwargs = {}
 
-        try:
-            placeholders_by_page = settings.PLACEHOLDERS_SEARCH_LIST
-        except AttributeError:
-            placeholders_by_page = {}
-
+        placeholders_by_page = getattr(settings, 'PLACEHOLDERS_SEARCH_LIST', {})
 
         if placeholders_by_page:
             filter_target = None
