@@ -42,7 +42,7 @@ class TitleIndex(get_index_base()):
         queryset = CMSPlugin.objects.filter(language=language)
         return queryset
 
-    def get_search_data(self, obj, language, request):
+    def get_page_placeholders(self, page):
         """
         In the project settings set up the variable
 
@@ -65,8 +65,7 @@ class TitleIndex(get_index_base()):
 
         PLACEHOLDERS_SEARCH_LIST = {}
         """
-        current_page = obj.page
-        reverse_id = getattr(current_page, 'reverse_id', None)
+        reverse_id = getattr(page, 'reverse_id', None)
         args = []
         kwargs = {}
 
@@ -95,7 +94,12 @@ class TitleIndex(get_index_base()):
                 kwargs['slot__in'] = diff
             else:
                 args.append(~Q(slot__in=excluded))
-        placeholders = current_page.placeholders.filter(*args, **kwargs)
+        return page.placeholders.filter(*args, **kwargs)
+
+
+    def get_search_data(self, obj, language, request):
+        current_page = obj.page
+        placeholders = self.get_page_placeholders(current_page)
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text_bits = []
 
