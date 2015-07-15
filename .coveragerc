@@ -1,6 +1,8 @@
 [run]
 branch = True
 source = aldryn_search
+omit =
+    aldryn_search/tests.py
 
 [report]
 exclude_lines =
