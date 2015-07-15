@@ -186,7 +186,7 @@ class PluginExcludeAndFilterIndexingTests2(TestCase):
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
         indexed = index.prepare(title)
         self.assertEqual('test_page2', indexed['title'])
-        self.assertEqual('test_page2', indexed['text'])
+        self.assertEqual('test_page2 rendered plugin content never search for this content', indexed['text'])
 
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option2(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
@@ -207,7 +207,7 @@ class PluginExcludeAndFilterIndexingTests2(TestCase):
         index.update_object(title, using=DEFAULT_ALIAS)
         indexed = index.prepared_data
         self.assertEqual('test_page2', indexed['title'])
-        self.assertEqual('test_page2', indexed['text'])
+        self.assertEqual('test_page2 rendered plugin content never search for this content', indexed['text'])
 
 
 class PluginExcludeAndFilterIndexingTests3(TestCase):
@@ -474,7 +474,7 @@ class PluginExcludeAndFilterIndexingTests8(TestCase):
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
         indexed = index.prepare(title)
         self.assertEqual('test_page8', indexed['title'])
-        self.assertEqual('test_page8', indexed['text'])
+        self.assertEqual('test_page8 rendered plugin content never search for this content', indexed['text'])
 
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option8(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
@@ -495,4 +495,4 @@ class PluginExcludeAndFilterIndexingTests8(TestCase):
         index.update_object(title, using=DEFAULT_ALIAS)
         indexed = index.prepared_data
         self.assertEqual('test_page8', indexed['title'])
-        self.assertEqual('test_page8', indexed['text'])
+        self.assertEqual('test_page8 rendered plugin content never search for this content', indexed['text'])

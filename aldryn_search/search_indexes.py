@@ -67,7 +67,8 @@ class TitleIndex(get_index_base()):
         """
         current_page = obj.page
         reverse_id = current_page.reverse_id
-        args = {}
+        args = []
+        kwargs = {}
 
         try:
             placeholders_by_page = settings.PLACEHOLDERS_SEARCH_LIST
@@ -77,15 +78,24 @@ class TitleIndex(get_index_base()):
 
         if placeholders_by_page:
             filter_target = None
+            excluded = []
+            slots = []
             if '*' in placeholders_by_page:
                 filter_target = '*'
             if reverse_id and reverse_id in placeholders_by_page:
                 filter_target = reverse_id
             if not filter_target:
                 raise AttributeError('Leave PLACEHOLDERS_SEARCH_LIST empty or set up at least the generic handling')
-            slots = [el for el in placeholders_by_page[filter_target] if not el.startswith('-')]
-            args['slot__in'] = slots
-        placeholders = current_page.placeholders.all().filter(**args)
+            if 'include' in placeholders_by_page[filter_target]:
+                slots = placeholders_by_page[filter_target]['include']
+            if 'exclude' in placeholders_by_page[filter_target]:
+                excluded = placeholders_by_page[filter_target]['exclude']
+            diff = set(slots) - set(excluded)
+            if diff:
+                kwargs['slot__in'] = diff
+            else:
+                args.append(~Q(slot__in=excluded))
+        placeholders = current_page.placeholders.filter(*args, **kwargs)
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text_bits = []
 

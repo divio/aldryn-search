@@ -41,14 +41,28 @@ HELPER_SETTINGS = {
         'content': {},
     },
     'PLACEHOLDERS_SEARCH_LIST': {
-        '*': [],
-        'testpage': ['content'],
-        'testpage2': [],
-        'testpage3': ['-content', '-hidden_content'],
-        'testpage4': ['content', '-hidden_content'],
-        'testpage5': ['-content', 'hidden_content'],
-        'testpage6': ['content', 'hidden_content'],
-        'testpage7': ['hidden_content'],
+        '*': {},
+        'testpage': {
+            'include': ['content'],
+        },
+        'testpage2': {},
+        'testpage3': {
+            'exclude': ['content', 'hidden_content']
+        },
+        'testpage4': {
+            'include': ['content'],
+            'exclude': ['hidden_content']
+        },
+        'testpage5': {
+            'include': ['hidden_content'],
+            'exclude': ['content']
+        },
+        'testpage6': {
+            'include': ['hidden_content', 'content'],
+        },
+        'testpage7': {
+            'include': ['hidden_content'],
+        }
     },
 }
 
