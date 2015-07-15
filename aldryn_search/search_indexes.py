@@ -47,19 +47,30 @@ class TitleIndex(get_index_base()):
         In the project settings set up the variable
 
         PLACEHOLDERS_SEARCH_LIST = {
-            '*': ['slot1', 'slot2', etc. ], #mandatory
-            'reverse_id_alpha': ['slot1', 'slot2', etc. ],
-            'reverse_id_beta': ['slot1', 'slot2', etc. ],
+            # '*' is mandatory if you define at least one slot rule
+            '*': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            }
+            'reverse_id_alpha': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
+            'reverse_id_beta': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
+            'reverse_id_only_include': {
+                'include': [ 'slot1', 'slot2', etc. ],
+            },
+            'reverse_id_only_exclude': {
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
             # exclude it from the placehoders search list
             # (however better to remove at all to exclude it)
             'reverse_id_empty': []
             etc.
         }
-
-        Put '-' (minus) before the slot string to exclude it
-
-        'slot_name' -> search for slot_name
-        '-slot_name' -> exclude slot name from the search list
 
         or leave it empty
 
