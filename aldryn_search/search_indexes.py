@@ -66,7 +66,7 @@ class TitleIndex(get_index_base()):
         PLACEHOLDERS_SEARCH_LIST = {}
         """
         current_page = obj.page
-        reverse_id = current_page.reverse_id
+        reverse_id = getattr(current_page, 'reverse_id', None)
         args = []
         kwargs = {}
 
