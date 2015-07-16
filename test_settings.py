@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+gettext = lambda s: s
+
+import os
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
@@ -20,12 +24,46 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HELPER_SETTINGS = {
+    'TEMPLATE_DIRS': ('aldryn_search/tests_data/templates/',),
+    'CMS_TEMPLATES': (
+        ('fullwidth.html', 'Fullwidth'),
+        ('page.html', 'Normal page'),
+        ('test.html', 'Normal page2'),
+    ),
     'ALLOWED_HOSTS': ['localhost'],
     'CMS_LANGUAGES': {1: [{'code': 'en', 'name': 'English'}]},
     'LANGUAGES': (('en', 'English'),),
     'LANGUAGE_CODE': 'en',
-    'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
+    #'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
+    'CMS_PERMISSION': True,
+    'CMS_PLACEHOLDER_CONF': {
+        'content': {},
+    },
+    'PLACEHOLDERS_SEARCH_LIST': {
+        '*': {},
+        'testpage': {
+            'include': ['content'],
+        },
+        'testpage2': {},
+        'testpage3': {
+            'exclude': ['content', 'hidden_content']
+        },
+        'testpage4': {
+            'include': ['content'],
+            'exclude': ['hidden_content']
+        },
+        'testpage5': {
+            'include': ['hidden_content'],
+            'exclude': ['content']
+        },
+        'testpage6': {
+            'include': ['hidden_content', 'content'],
+        },
+        'testpage7': {
+            'include': ['hidden_content'],
+        }
+    },
 }
 
 

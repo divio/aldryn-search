@@ -42,9 +42,71 @@ class TitleIndex(get_index_base()):
         queryset = CMSPlugin.objects.filter(language=language)
         return queryset
 
+    def get_page_placeholders(self, page):
+        """
+        In the project settings set up the variable
+
+        PLACEHOLDERS_SEARCH_LIST = {
+            # '*' is mandatory if you define at least one slot rule
+            '*': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            }
+            'reverse_id_alpha': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
+            'reverse_id_beta': {
+                'include': [ 'slot1', 'slot2', etc. ],
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
+            'reverse_id_only_include': {
+                'include': [ 'slot1', 'slot2', etc. ],
+            },
+            'reverse_id_only_exclude': {
+                'exclude': [ 'slot3', 'slot4', etc. ],
+            },
+            # exclude it from the placehoders search list
+            # (however better to remove at all to exclude it)
+            'reverse_id_empty': []
+            etc.
+        }
+
+        or leave it empty
+
+        PLACEHOLDERS_SEARCH_LIST = {}
+        """
+        reverse_id = page.reverse_id
+        args = []
+        kwargs = {}
+
+        placeholders_by_page = getattr(settings, 'PLACEHOLDERS_SEARCH_LIST', {})
+
+        if placeholders_by_page:
+            filter_target = None
+            excluded = []
+            slots = []
+            if '*' in placeholders_by_page:
+                filter_target = '*'
+            if reverse_id and reverse_id in placeholders_by_page:
+                filter_target = reverse_id
+            if not filter_target:
+                raise AttributeError('Leave PLACEHOLDERS_SEARCH_LIST empty or set up at least the generic handling')
+            if 'include' in placeholders_by_page[filter_target]:
+                slots = placeholders_by_page[filter_target]['include']
+            if 'exclude' in placeholders_by_page[filter_target]:
+                excluded = placeholders_by_page[filter_target]['exclude']
+            diff = set(slots) - set(excluded)
+            if diff:
+                kwargs['slot__in'] = diff
+            else:
+                args.append(~Q(slot__in=excluded))
+        return page.placeholders.filter(*args, **kwargs)
+
+
     def get_search_data(self, obj, language, request):
         current_page = obj.page
-        placeholders = current_page.placeholders.all()
+        placeholders = self.get_page_placeholders(current_page)
         plugins = self.get_plugin_queryset(language).filter(placeholder__in=placeholders)
         text_bits = []
 
