@@ -303,7 +303,7 @@ class PluginExcludeAndFilterIndexingTests7(BaseTestCase):
         self.assertEqual('test_page7', indexed['title'])
         self.assertEqual('test_page7 never search for this content', indexed['text'])
 
-class PluginExcludeAndFilterIndexingTests7(BaseTestCase):
+class PluginExcludeAndFilterIndexingTests8(BaseTestCase):
 
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option8(self):
         """This tests the indexing path way used by update_index mgmt command"""
