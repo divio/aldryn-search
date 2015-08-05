@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import six
 
 from lxml.html.clean import Cleaner as LxmlCleaner
-from lxml.etree import ParseError
+from lxml.etree import ParseError, ParserError
 
 
 from django.core.exceptions import ImproperlyConfigured
@@ -141,7 +141,7 @@ def strip_tags(value):
 
         try:
             partial_strip = LxmlCleaner().clean_html(value)
-        except ParseError:
+        except (ParseError, ParserError):
             # Error could occur because of invalid html document,
             # including '' values. We don't want to return empty handed.
             partial_strip = value
