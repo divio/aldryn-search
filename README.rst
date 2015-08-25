@@ -3,7 +3,6 @@ aldryn-search
 =================
 
 This package provides a search indexes for easy Haystack 2 integration with django CMS.
-The package is compatible with `Aldryn <http://www.aldryn.com>`_.
 
 Usage
 =====
