@@ -1,14 +1,15 @@
-#####################
-application-full-name
-#####################
+#############
+Aldryn Search
+#############
 
-application-full-name is [describe what the the application is in a couple of paragraphs. What/who
-is it for, what is it compatible with/part of, etc.]
+Aldryn Search is an application that acts like a bridge between django-haystack and django-cms.
+It's also a great tool to hookup search capabilities to any django app, specially apps that make use of
+multilingual frameworks like django-hvad or django-parler. It's designed with multiple languages in mind,
+and provides multiple helpers to easily search within a language based setup (like one core per language in solr).
 
-application-full-name allows you to [describe what the application does - it a few key points about
-its functionality]
+Aldryn Search allows you to easily setup a search interface to django-cms and/or any Django app.
 
-application-full-name is `open-source software <application-repo-url>`_.
+Aldryn Search is `open-source software <https://github.com/aldryn/aldryn-search>`_.
 
 [delete any unneeded sections from the table of contents]
 
