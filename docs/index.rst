@@ -1,22 +1,25 @@
-.. Aldryn Search documentation master file, created by
-   sphinx-quickstart on Mon Aug 31 17:28:18 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+#####################
+application-full-name
+#####################
 
-Welcome to Aldryn Search's documentation!
-=========================================
+application-full-name is [describe what the the application is in a couple of paragraphs. What/who
+is it for, what is it compatible with/part of, etc.]
 
-Contents:
+application-full-name allows you to [describe what the application does - it a few key points about
+its functionality]
+
+application-full-name is `open-source software <application-repo-url>`_.
+
+[delete any unneeded sections from the table of contents]
 
 .. toctree::
    :maxdepth: 2
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   index.rst
+   introduction/index
+   how-to/index
+   topics/index
+   reference/index
+   contributing/index
+   upgrade/index
+   user/index
