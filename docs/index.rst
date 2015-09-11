@@ -3,7 +3,7 @@ Aldryn Search
 #############
 
 Aldryn Search is an application that acts like a bridge between django-haystack and django-cms.
-It's also a great tool to hookup search capabilities to any django app, specially apps that make use of
+It's also a great tool to hookup search capabilities to any django app, especially apps that make use of
 multilingual frameworks like django-hvad or django-parler. It's designed with multiple languages in mind,
 and provides multiple helpers to easily search within a language based setup (like one core per language in solr).
 

@@ -2,80 +2,78 @@
 Installation
 ############
 
+*******************
+Installing packages
+*******************
 
-Example content:
+We'll assume you have a django CMS (version 3.x) project up and running.
 
-    *******************
-    Installing packages
-    *******************
+If you need to set up a new django CMS project, follow the instructions in the `django CMS
+tutorial <http://docs.django-cms.org/en/develop/introduction/install.html>`_.
 
-    We'll assume you have a django CMS (version 3.x) project up and running.
+Then run either::
 
-    If you need to set up a new django CMS project, follow the instructions in the `django CMS
-    tutorial <http://docs.django-cms.org/en/develop/introduction/install.html>`_.
+    pip install aldryn-search
 
-    Then run either::
+or to install from the latest source tree::
 
-        pip install aldryn-jobs
-
-    or to install from the latest source tree::
-
-        pip install -e git+https://github.com/aldryn/aldryn-jobs.git#egg=aldryn-jobs
+    pip install -e git+https://github.com/aldryn/aldryn-search.git#egg=aldryn-search
 
 
-    ***********
-    settings.py
-    ***********
+***********
+settings.py
+***********
 
-    In your project's ``settings.py`` make sure you have all of::
+In your project's ``settings.py`` make sure you have all of::
 
-        'absolute',
-        'aldryn_common',
-        'aldryn_boilerplates',
-        'aldryn_apphooks_config',
-        'aldryn_reversion',
-        'aldryn_categories',
-        'aldryn_jobs',
-        'emailit',
-        'parler',
-        'standard_form',
-        'sortedm2m',
+    'haystack',
+    'aldryn_common',
+    'aldryn_search',
+    'standard_form',
+    'spurl',
 
-    listed in ``INSTALLED_APPS``, *after* ``'cms'``.
+listed in ``INSTALLED_APPS``, *after* ``'cms'``.
 
-    .. note::
-       If you are using Django 1.6, add ``south`` to  ``INSTALLED_APPS``.
+.. note::
+   If you are using Django 1.6, add ``south`` to  ``INSTALLED_APPS``.
+
+**************
+setup haystack
+**************
+You'll need to setup django-haystack according to the instructions in:
+http://django-haystack.readthedocs.org/en/master/tutorial.html#installation
+
+.. note::
+
+Regardless of the search backend you picked, you need to have a ``default`` connection
+in your ``HAYSTACK_CONNECTIONS`` setting.
+
+So if you've got multiple languages, your configuration could look something like::
+
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+            'URL': 'http://my-solr-server/solr/my-site-de/',
+        },
+        'en': {
+            'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+            'URL': 'http://my-solr-server/solr/my-site-en/',
+        },
+        'fr': {
+            'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+            'URL': 'http://my-solr-server/solr/my-site-fr/',
+        },
+    }
 
 
-    Now set the name of the boilerplate you want to use in your project::
+With these settings, we can have aldryn search map a connection alias to a language
+and then we can use the ``ALDRYN_SEARCH_DEFAULT_LANGUAGE`` setting to tell aldryn-search
+which language should it fallback to if it can't map an alias to a language.
+So for our example, we would set ``ALDRYN_SEARCH_DEFAULT_LANGUAGE`` to ``'de'``, then the default alias will always
+map to the ``'de'`` language.
 
-        ALDRYN_BOILERPLATE_NAME = 'bootstrap3'
+*************
+Rebuild index
+*************
 
-    .. note::
-       Note that Aldryn Jobs doesn't use the the traditional Django ``/templates`` and ``/static
-       directories``. Instead, it employs `Aldryn Boilerplates
-       <https://github.com/aldryn/aldryn-boilerplates>`_, which makes it possible to to support
-       multiple different frontend schemes ('Boilerplates')and switch between them without the need
-       for project-by-project file overwriting.
-
-       Aldryn Jobs's templates and staticfiles will be found in named directories inside the
-       ``/boilerplates`` directory.
-
-
-    ****************************
-    Prepare the database and run
-    ****************************
-
-    Now run ``python manage.py migrate`` to prepare the database for the new application, then
-    ``python manage.py runserver``.
-
-
-    ****************
-    For Aldryn users
-    ****************
-
-    On the Aldryn platform, the Addon is available from the `Marketplace
-    <http://www.aldryn.com/en/marketplace>`_.
-
-    You can also `install Aldryn Jobs into any existing Aldryn project
-    <https://control.aldryn.com/control/?select_project_for_addon=aldryn-jobs>`_.
+Now run ``python manage.py rebuild_index`` to push all your data from the database to your configured search backend.

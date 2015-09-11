@@ -2,47 +2,58 @@
 Reference
 #########
 
+ALDRYN_SEARCH_CMS_PAGE
+======================
 
-Example content::
+Tells aldryn-search to register cms pages with haystack.
+Setting this to False would mean cms pages are *not* going to be searchable.
 
-    ******************
-    Attachment storage
-    ******************
+Default: ``True``
 
-    Job applicants can attach files in support of their applications for vacancies. These files are
-    saved and stored using Django's file storage API. You need to ensure that the storage options
-    you choose are appropriately secured against unauthorised access:
+ALDRYN_SEARCH_DEFAULT_LANGUAGE
+==============================
 
-    ALDRYN_JOBS_ATTACHMENT_STORAGE
-    ==============================
+aldryn-search will try to match a backend alias to a valid language, when it can't find one
+it will default to this setting.
+This applies mostly for the ``default`` alias which does not match a language and so aldryn-search
+needs to know which language should be used when indexing to this connection.
 
-    The storage object that is going to be passed directly to ``FileField`` constructor.
+Default: ``settings.LANGUAGE_CODE``
 
-    Refer to Django's file storage API documentation for more info.
+ALDRYN_SEARCH_INDEX_BASE_CLASS
+==============================
 
-    Default: ``None`` (which means ``django.core.files.storage.default_storage`` is going to be
-    used).
+aldryn-search comes with an index class that provides some pre-configured fields,
+sometimes it's useful to override this class or extend it in order to add project specific
+fields to your index, like permission related fields, etc..
 
-    ALDRYN_JOBS_ATTACHMENT_UPLOAD_DIR
-    =================================
+Default: ``'aldryn_search.base.AldrynIndexBase'``.
 
-    The directory atachments will be uploaded to.
+ALDRYN_SEARCH_LANGUAGE_FROM_ALIAS
+=================================
 
-    Default: ``attachments/%Y/%m/``.
+By design, aldryn-search will do a one to one match from a haystack connection alias
+to a valid django language code.
+Sometimes you need to prefix your aliases, maybe in a solr setup where you to serve public content
+and private content, and you choose to create multilingual cores prefixed by public or private.
+So this setting allows you to define a callable or a path to one, that takes a connection alias as the one and only parameter
+and returns a valid language.
 
+Given the scenario above, you can set this to ``lambda alias: alias.split('-'][-1]``
 
-    File Count & Size
-    =================
+Default: ``'aldryn_search.utils.language_from_alias'``.
 
-    * ``ALDRYN_JOBS_ATTACHMENTS_MAX_COUNT``: Max amount of files to be uploadable (default: 5)
-    * ``ALDRYN_JOBS_ATTACHMENTS_MIN_COUNT``: Min amount of files to be uploadable (default: 0)
-    * ``ALDRYN_JOBS_ATTACHMENTS_MAX_FILE_SIZE``: Max file size (each) (default: 5MB)
+ALDRYN_SEARCH_PAGINATION
+========================
+The number of items to include per page when paginating search results.
 
+Default: ``10``.
 
-    Sending email
-    =============
+ALDRYN_SEARCH_REGISTER_APPHOOK
+==============================
 
-    Please refer to django-emailit_ documentation for info on installation.
+Depending on your project requirements, you'll either use aldryn search view directly
+or connect it to a django-cms page using apphooks.
+This setting tells aldryn-search to register it's apphook with the cms.
 
-    .. _django-emailit : http://github.com/divio/django-emailit
-
+Default: ``True``.
