@@ -18,9 +18,4 @@ Aldryn Search is `open-source software <https://github.com/aldryn/aldryn-search>
 
    index.rst
    introduction/index
-   how-to/index
-   topics/index
    reference/index
-   contributing/index
-   upgrade/index
-   user/index
