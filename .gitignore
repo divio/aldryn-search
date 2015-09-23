@@ -5,3 +5,8 @@ dist/*
 build/*
 .tox
 .coverage
+/docs/*.html
+/docs/_build
+/.env/
+/env/
+
