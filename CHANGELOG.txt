@@ -1,3 +1,8 @@
+==== 0.2.10 (2015-10-15) ====
+
+- Documentation
+- Django 1.8 - compatibility
+
 ==== 0.2.9 (2015-08-05) ====
 
 - Tests
