@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from cms.plugin_rendering import PluginContext
 import django
+from cms.plugin_rendering import PluginContext
 from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.test import RequestFactory
