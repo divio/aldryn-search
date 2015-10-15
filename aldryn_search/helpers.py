@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from cms.plugin_rendering import PluginContext
 from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.test import RequestFactory
@@ -44,7 +45,8 @@ def get_plugin_index_data(base_plugin, request):
         search_contents = not bool(search_fields)
 
     if search_contents:
-        plugin_contents = instance.render_plugin(context=RequestContext(request))
+        plugin_context = PluginContext({'request': request}, instance, instance.placeholder)
+        plugin_contents = instance.render_plugin(context=plugin_context)
 
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)
