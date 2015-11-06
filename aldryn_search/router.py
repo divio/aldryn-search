@@ -34,9 +34,14 @@ class LanguageRouter(routers.BaseRouter):
             try:
                 index = unified_index.get_index(instance.__class__)
             except NotHandled:
-                pass
-            else:
-                language = index.get_current_language(using=alias, obj=instance)
+                return alias
+
+            # language can be None if the object is not language aware.
+            # if it does return None then we fallback to the old behavior
+            # of relying on the thread language.
+            language = index.get_language(obj=instance)
+
+            if language:
                 # Override alias with one matching the object language.
                 alias = alias_from_language(language)
         return alias
