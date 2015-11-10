@@ -16,6 +16,7 @@ except ImportError:
 try:
     import importlib
 except ImportError:
+    # python 2.6 compatibility
     from django.utils import importlib
 from django.utils.html import strip_tags as _strip_tags
 
