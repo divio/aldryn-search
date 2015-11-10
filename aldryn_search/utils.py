@@ -13,7 +13,10 @@ try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
-from django.utils.importlib import import_module
+try:
+    import importlib
+except ImportError:
+    from django.utils import importlib
 from django.utils.html import strip_tags as _strip_tags
 
 from haystack import DEFAULT_ALIAS
@@ -51,7 +54,7 @@ def get_callable(string_or_callable):
         return string_or_callable
     else:
         module_name, object_name = string_or_callable.rsplit('.', 1)
-        module = import_module(module_name)
+        module = importlib.import_module(module_name)
         return getattr(module, object_name)
 
 
