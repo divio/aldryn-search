@@ -36,6 +36,7 @@ HELPER_SETTINGS = {
     'LANGUAGE_CODE': 'en',
     #'TEMPLATE_LOADERS': ('aldryn_search.tests.FakeTemplateLoader',),
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
+    'HAYSTACK_SIGNAL_PROCESSOR': 'aldryn_search.signal_processor.AldrynSignalProcessor',
     'CMS_PERMISSION': True,
     'CMS_PLACEHOLDER_CONF': {
         'content': {},
