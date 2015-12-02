@@ -1,17 +1,17 @@
-from django.template import Template
-from django.test import TestCase
-
 from cms.api import create_page, add_plugin
+from cms.models import CMSPlugin, Title
+from cms.models.placeholdermodel import Placeholder
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from cms.models.placeholdermodel import Placeholder
-from cms.models import CMSPlugin, Title
-
-from aldryn_search.search_indexes import TitleIndex
-from .helpers import get_plugin_index_data, get_request
-
+from django.template import Template
+from django.test import TestCase
 from haystack import connections
 from haystack.constants import DEFAULT_ALIAS
+from haystack.query import SearchQuerySet
+
+from aldryn_search.search_indexes import TitleIndex
+
+from .helpers import get_plugin_index_data, get_request
 
 
 class FakeTemplateLoader(object):
@@ -328,3 +328,13 @@ class PluginExcludeAndFilterIndexingTests8(BaseTestCase):
         indexed = index.prepared_data
         self.assertEqual('test_page8', indexed['title'])
         self.assertEqual('test_page8 rendered plugin content never search for this content', indexed['text'])
+
+class UnpublishTest(BaseTestCase):
+        
+    def test_unpublish_page(self):
+        page = create_page('test page', 'test.html', 'en', published=True)
+        title = page.publisher_public.get_title_obj('en')
+        self.assertEqual(1, SearchQuerySet().models(Title).filter(id=title.pk).count())
+        page.unpublish('en')
+        self.assertEqual(0, SearchQuerySet().models(Title).filter(id=title.pk).count())
+        
