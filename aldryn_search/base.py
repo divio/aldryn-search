@@ -101,6 +101,7 @@ class AldrynIndexBase(AbstractIndex):
     language = indexes.CharField()
     description = indexes.CharField(indexed=False, stored=True, null=True)
     pub_date = indexes.DateTimeField(null=True)
+    changed_date = indexes.DateTimeField(null=True)
     login_required = indexes.BooleanField(default=False)
     url = indexes.CharField(stored=True, indexed=False)
     title = indexes.CharField(stored=True, indexed=False)
