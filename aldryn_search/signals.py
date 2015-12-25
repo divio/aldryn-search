@@ -6,4 +6,5 @@ Created on Nov 30, 2015
 '''
 from django.dispatch.dispatcher import Signal
 
-post_unpublish = Signal(providing_args=['instance'])
+add_to_index = Signal(providing_args=['instance'])
+remove_from_index = Signal(providing_args=['instance'])
