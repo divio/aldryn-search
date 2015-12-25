@@ -4,19 +4,41 @@ Created on Dec 1, 2015
 
 @author: jakob
 '''
-from haystack.signals import RealtimeSignalProcessor
+import copy
 
-from aldryn_search.signals import add_to_index, remove_from_index
+from haystack.exceptions import NotHandled
+from haystack.signals import (
+    RealtimeSignalProcessor as BaseRealtimeSignalProcessor
+)
+from .signals import add_to_index, remove_from_index
 
 
-class AldrynSignalProcessor(RealtimeSignalProcessor):
-    
+class RealtimeSignalProcessor(BaseRealtimeSignalProcessor):
+
     def setup(self):
-        super(AldrynSignalProcessor, self).setup()
+        super(RealtimeSignalProcessor, self).setup()
         add_to_index.connect(self.handle_save)
         remove_from_index.connect(self.handle_delete)
 
     def teardown(self):
-        super(AldrynSignalProcessor, self).teardown()
+        super(RealtimeSignalProcessor, self).teardown()
         add_to_index.disconnect(self.handle_save)
         remove_from_index.disconnect(self.handle_delete)
+
+    def handle_save(self, sender, instance, **kwargs):
+        kwargs = copy.copy(kwargs)
+
+        # Exact copy of Haystack's handle_save()
+        # except that we pass any kwargs to the update_object method
+        using_backends = self.connection_router.for_write(instance=instance)
+
+        for using in using_backends:
+            kwargs['using'] = using
+
+            try:
+                index = self.connections[using].get_unified_index().get_index(sender)
+                # TODO: This should be done by haystack.
+                index.update_object(instance, **kwargs)
+            except NotHandled:
+                # TODO: Maybe log it or let the exception bubble?
+                pass
