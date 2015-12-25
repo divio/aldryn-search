@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-import django
-from cms.plugin_rendering import PluginContext
 from django.contrib.auth.models import AnonymousUser
-from django.template import RequestContext
+from django.template import Engine, RequestContext
 from django.test import RequestFactory
 from django.utils.text import smart_split
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
+
+from cms.toolbar.toolbar import CMSToolbar
+from cms.utils.compat import DJANGO_1_7
 
 from .conf import settings
 from .utils import get_field_value, strip_tags
@@ -46,11 +47,22 @@ def get_plugin_index_data(base_plugin, request):
         search_contents = not bool(search_fields)
 
     if search_contents:
-        if django.get_version() < '1.8':
-            plugin_context = RequestContext(request)
-        else:
-            plugin_context = PluginContext({'request': request}, instance, instance.placeholder)
-        plugin_contents = instance.render_plugin(context=plugin_context)
+        context = RequestContext(request)
+
+        if not DJANGO_1_7:
+            # On Django <= 1.7, the RequestContext class would call
+            # all context processors and update the context on initialization.
+            # On Django >= 1.8 the logic to update the context
+            # from context processors is now tied to the bind_template
+            # context manager.
+            updates = {}
+            engine = Engine.get_default()
+
+            for processor in engine.template_context_processors:
+                updates.update(processor(context.request))
+            context.dicts[context._processors_index] = updates
+
+        plugin_contents = instance.render_plugin(context=context)
 
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)
@@ -74,4 +86,5 @@ def get_request(language=None):
     # Needed for plugin rendering.
     request.current_page = None
     request.user = AnonymousUser()
+    request.toolbar = CMSToolbar(request)
     return request
