@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import AnonymousUser
-from django.template import Engine, RequestContext
+from django.template import RequestContext
 from django.test import RequestFactory
 from django.utils.text import smart_split
 try:
@@ -50,6 +50,7 @@ def get_plugin_index_data(base_plugin, request):
         context = RequestContext(request)
 
         if not DJANGO_1_7:
+            from django.template import Engine
             # On Django <= 1.7, the RequestContext class would call
             # all context processors and update the context on initialization.
             # On Django >= 1.8 the logic to update the context
