@@ -61,8 +61,7 @@ uses the alias as a language.
 
 For a complete Haystack setup, please refer to their `documentation <http://docs.haystacksearch.org/dev/>`_.
 
-For more docs, see the ``docs`` folder or the
-`online documentation <http://django-cms-search.readthedocs.org/en/latest/>`_.
+For more documentation, see the `docs folder <https://github.com/aldryn/aldryn-search/tree/master/docs/>`_.
 
 Integration with django CMS
 ===========================
