@@ -14,10 +14,10 @@ from .signals import add_to_index, remove_from_index
 @receiver(post_publish, dispatch_uid='publish_cms_page')
 def publish_cms_page(sender, instance, language, **kwargs):
     title = instance.publisher_public.get_title_obj(language)
-    add_to_index.send(sender=Title, instance=title, action='publish')
+    add_to_index.send(sender=Title, instance=title, object_action='publish')
 
 
 @receiver(post_unpublish, dispatch_uid='unpublish_cms_page')
 def unpublish_cms_page(sender, instance, language, **kwargs):
     title = instance.publisher_public.get_title_obj(language)
-    remove_from_index.send(sender=Title, instance=title, action='unpublish')
+    remove_from_index.send(sender=Title, instance=title, object_action='unpublish')
