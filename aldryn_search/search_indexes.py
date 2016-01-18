@@ -15,7 +15,7 @@ _strip_tags = strip_tags
 class TitleIndex(get_index_base()):
     index_title = True
 
-    actions = ('publish', 'unpublish')
+    cms_actions = ('publish', 'unpublish')
     haystack_use_for_indexing = settings.ALDRYN_SEARCH_CMS_PAGE
 
     def prepare_pub_date(self, obj):
@@ -146,4 +146,4 @@ class TitleIndex(get_index_base()):
     def should_update(self, instance, **kwargs):
         # We use the action flag to prevent
         # updating the cms page on save.
-        return kwargs.get('action') in self.actions
+        return kwargs.get('cms_action') in self.cms_actions

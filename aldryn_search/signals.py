@@ -6,5 +6,5 @@ Created on Nov 30, 2015
 '''
 from django.dispatch.dispatcher import Signal
 
-add_to_index = Signal(providing_args=['instance'])
-remove_from_index = Signal(providing_args=['instance'])
+add_to_index = Signal(providing_args=['instance', 'cms_action'])
+remove_from_index = Signal(providing_args=['instance', 'cms_action'])
