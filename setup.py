@@ -25,9 +25,11 @@ setup(
     author_email = m.author_email,
     packages=find_packages(),
     install_requires = install_requires,
-    include_package_data = True, #Accept all data files and directories matched by MANIFEST.in or found in source control.
+    # Accept all data files and directories matched by MANIFEST.in
+    # or found in source control.
+    include_package_data = True,
     package_dir = {
-        m.package_name:m.package_name,
+        m.package_name: m.package_name,
     },
     zip_safe=False,
     classifiers = [

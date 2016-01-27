@@ -1,0 +1,4 @@
+coverage
+pysolr
+djangocms-admin-style
+django-appconf
