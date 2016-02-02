@@ -56,10 +56,12 @@ class AbstractIndex(indexes.SearchIndex):
         """
         Helper method bound to ALWAYS return a language.
 
-        When obj is not None, this calls self.get_language to try and get a language from obj,
-        this is useful when the object itself defines it's language in a "language" field.
+        When obj is not None, this calls self.get_language to try and get a
+        language from obj, this is useful when the object itself defines it's
+        language in a "language" field.
 
-        If no language was found or obj is None, then we call self.get_default_language to try and get a fallback language.
+        If no language was found or obj is None, then we call
+        self.get_default_language to try and get a fallback language.
         """
         language = self.get_language(obj) if obj else None
         return language or self.get_default_language(using)
