@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-gettext = lambda s: s
+def gettext(s): return s
 
 HAYSTACK_CONNECTIONS = {
     'default': {

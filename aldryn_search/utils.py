@@ -82,12 +82,17 @@ def get_index_base():
         raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s' % (str(error)))
 
     if not issubclass(BaseClass, SearchIndex):
-        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s is not a subclass of haystack.indexes.SearchIndex' % index_string)
+        exception_message = ('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s is not a '
+                             'subclass of haystack.indexes.SearchIndex')
+        raise ImproperlyConfigured(exception_message % index_string)
 
     required_fields = ['text', 'language']
 
     if not all(field in BaseClass.fields for field in required_fields):
-        raise ImproperlyConfigured('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s must contain at least these fields: %s' % (index_string, required_fields))
+        exception_message = ('ALDRYN_SEARCH_INDEX_BASE_CLASS: %s must contain '
+                             'at least these fields: %s')
+        raise ImproperlyConfigured(exception_message % (index_string,
+                                                        required_fields))
     return BaseClass
 
 

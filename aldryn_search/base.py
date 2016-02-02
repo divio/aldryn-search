@@ -108,7 +108,8 @@ class AldrynIndexBase(AbstractIndex):
 
     def __init__(self):
         if hasattr(self, 'INDEX_TITLE'):
-            warning_message = 'AldrynIndexBase.INDEX_TITLE is deprecated; use AldrynIndexBase.index_title instead'
+            warning_message = ('AldrynIndexBase.INDEX_TITLE is deprecated; '
+                               'use AldrynIndexBase.index_title instead')
             warnings.warn(warning_message, PendingDeprecationWarning)
         super(AldrynIndexBase, self).__init__()
 

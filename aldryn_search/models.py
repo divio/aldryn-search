@@ -1,1 +1,1 @@
-from aldryn_search import receivers # @UnusedImport
+from aldryn_search import receivers  # NOQA @UnusedImport
