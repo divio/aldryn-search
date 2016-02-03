@@ -1,12 +1,23 @@
+==== 0.2.11 (2016-02-03) ====
+
+- Add Django 1.9 compatibility.
+- Drop support for django CMS 2.4.
+- Travis setup fixes.
+- Fixed importlib deprecation warning.
+- Fixed bug where unpublishing cms page would not remove it from index.
+- Adds support for explicit signal based indexing.
+- Fixed regression on plugin indexing.
+- Restored the old _strip_tags due to a regression.
+
 ==== 0.2.10 (2015-10-15) ====
 
-- Documentation
-- Django 1.8 - compatibility
+- Documentation updates.
+- Add Django 1.8 compatibility.
 
 ==== 0.2.9 (2015-08-05) ====
 
-- Tests
-- Fixed issue with lxml parser error
+- Tests.
+- Fixed issue with lxml parser error.
 
 ==== 0.2.8 (2015-07-06) ====
 
@@ -15,7 +26,7 @@
 
 ==== 0.2.7 (2015-04-16) ====
 
-- Fixed a issue with get_language return wrong language in indexing
+- Fixed a issue with get_language return wrong language in indexing.
 
 ==== 0.2.6 (2015-01-27) ====
 
