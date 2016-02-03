@@ -104,7 +104,6 @@ class TitleIndex(get_index_base()):
                 args.append(~Q(slot__in=excluded))
         return page.placeholders.filter(*args, **kwargs)
 
-
     def get_search_data(self, obj, language, request):
         current_page = obj.page
         placeholders = self.get_page_placeholders(current_page)

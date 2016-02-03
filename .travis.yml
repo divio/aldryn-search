@@ -1,0 +1,48 @@
+language: python
+
+# Use container based infrastructure
+sudo: false
+
+env:
+  - TOX_ENV=flake8
+  # Django 1.9
+  - TOX_ENV=py34-dj19-cms32
+  - TOX_ENV=py27-dj19-cms32
+  # Django 1.8
+  - TOX_ENV=py34-dj18-cms32
+  - TOX_ENV=py34-dj18-cms31
+  - TOX_ENV=py33-dj18-cms32
+  - TOX_ENV=py33-dj18-cms31
+  - TOX_ENV=py27-dj18-cms32
+  - TOX_ENV=py27-dj18-cms31
+    # Django 1.7
+  - TOX_ENV=py34-dj17-cms32
+  - TOX_ENV=py34-dj17-cms31
+  - TOX_ENV=py34-dj17-cms30
+  - TOX_ENV=py33-dj17-cms32
+  - TOX_ENV=py33-dj17-cms31
+  - TOX_ENV=py33-dj17-cms30
+  - TOX_ENV=py27-dj17-cms31
+  - TOX_ENV=py27-dj17-cms30
+    # Django 1.6
+  - TOX_ENV=py27-dj16-cms31
+  - TOX_ENV=py27-dj16-cms30
+  - TOX_ENV=py27-dj16-cms30
+  - TOX_ENV=py26-dj16-cms30
+  - TOX_ENV=py26-dj16-cms31
+    # Django 1.5
+  - TOX_ENV=py27-dj15-cms30
+  - TOX_ENV=py26-dj15-cms30
+
+
+install:
+  - pip install tox coveralls
+
+script:
+  - tox -e $TOX_ENV
+
+after_success:
+  - coveralls
+
+notifications:
+  webhooks: http://addons.us-iad-rs.aldryn.io/en/travis-endpoint/

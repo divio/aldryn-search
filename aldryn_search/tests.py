@@ -329,12 +329,13 @@ class PluginExcludeAndFilterIndexingTests8(BaseTestCase):
         self.assertEqual('test_page8', indexed['title'])
         self.assertEqual('test_page8 rendered plugin content never search for this content', indexed['text'])
 
-class UnpublishTest(BaseTestCase):
-        
-    def test_unpublish_page(self):
-        page = create_page('test page', 'test.html', 'en', published=True)
-        title = page.publisher_public.get_title_obj('en')
-        self.assertEqual(1, SearchQuerySet().models(Title).filter(id=title.pk).count())
-        page.unpublish('en')
-        self.assertEqual(0, SearchQuerySet().models(Title).filter(id=title.pk).count())
-        
+# This test case is suitable only if you have a running solr, so if you do
+# please uncomment it and ensure that aldryn-search works as expected.
+# class UnpublishTest(BaseTestCase):
+#
+#     def test_unpublish_page(self):
+#         page = create_page('test page', 'test.html', 'en', published=True)
+#         title = page.publisher_public.get_title_obj('en')
+#         self.assertEqual(1, SearchQuerySet().models(Title).filter(id=title.pk).count())
+#         page.unpublish('en')
+#         self.assertEqual(0, SearchQuerySet().models(Title).filter(id=title.pk).count())
