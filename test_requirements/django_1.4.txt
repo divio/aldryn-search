@@ -1,0 +1,4 @@
+-r base.txt
+Django<1.5
+djangocms-helper==0.8.1
+django-discover-runner
