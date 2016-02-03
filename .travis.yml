@@ -33,6 +33,9 @@ env:
     # Django 1.5
   - TOX_ENV=py27-dj15-cms30
   - TOX_ENV=py26-dj15-cms30
+    # Django 1.4
+  - TOX_ENV=py27-dj14-cms30
+  - TOX_ENV=py26-dj14-cms30
 
 
 install:
