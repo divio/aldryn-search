@@ -7,7 +7,7 @@ install_requires = [
     'setuptools',
     'Django>=1.4',
     'django-appconf',
-    'django-cms>=2.4',
+    'django-cms>=3.0',
     'django-haystack>=2.0.0',
     'django-spurl',
     'django-standard-form',
