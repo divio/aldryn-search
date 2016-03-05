@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
 
 from cms.app_base import CMSApp
@@ -12,10 +12,7 @@ from .conf import settings
 class AldrynSearchApphook(CMSApp):
     name = _("aldryn search")
     urls = [
-        patterns(
-            '',
-            url('^$', AldrynSearchView.as_view(), name='aldryn-search'),
-        )
+        url('^$', AldrynSearchView.as_view(), name='aldryn-search'),
     ]
 
 
