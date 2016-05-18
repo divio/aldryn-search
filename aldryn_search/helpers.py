@@ -9,7 +9,8 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 from cms.toolbar.toolbar import CMSToolbar
-from cms.utils.compat import DJANGO_1_7
+
+from aldryn_common.compat import DJANGO_1_7
 
 from .conf import settings
 from .utils import get_field_value, strip_tags
