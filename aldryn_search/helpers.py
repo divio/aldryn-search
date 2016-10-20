@@ -16,6 +16,20 @@ from .conf import settings
 from .utils import get_field_value, strip_tags
 
 
+def _render_plugin(plugin,  context):
+    content_renderer = context.get('cms_content_renderer')
+
+    if content_renderer:
+        content = content_renderer.render_plugin(
+            instance=plugin,
+            context=context,
+            editable=False,
+        )
+    else:
+        content = plugin.render_plugin(context)
+    return content
+
+
 def get_cleaned_bits(data):
     decoded = force_unicode(data)
     stripped = strip_tags(decoded)
@@ -64,7 +78,7 @@ def get_plugin_index_data(base_plugin, request):
                 updates.update(processor(context.request))
             context.dicts[context._processors_index] = updates
 
-        plugin_contents = instance.render_plugin(context=context)
+        plugin_contents = _render_plugin(instance, context)
 
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)
