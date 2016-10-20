@@ -1,3 +1,8 @@
+==== 0.3.0 (2016-10-20) ====
+
+- Adds CMS 3.4.x compatibility
+- Adds Django 1.8.x compatibility
+
 ==== 0.2.12 (2016-05-19) ====
 
 - Adds CMS 3.3.x compatibility
