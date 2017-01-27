@@ -21,6 +21,9 @@ class TitleIndex(get_index_base()):
     def prepare_pub_date(self, obj):
         return obj.page.publication_date
 
+    def prepare_changed_date(self, obj):
+        return obj.page.changed_date
+
     def prepare_login_required(self, obj):
         return obj.page.login_required
 
