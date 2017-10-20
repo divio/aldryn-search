@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.contrib.auth.models import AnonymousUser
-from django.template import RequestContext
+from django.template import RequestContext, Engine
 from django.test import RequestFactory
 from django.utils.text import smart_split
 try:
@@ -10,17 +12,13 @@ except ImportError:
 
 from cms.toolbar.toolbar import CMSToolbar
 
-from aldryn_common.compat import DJANGO_1_7
-
 from .conf import settings
 from .utils import get_field_value, strip_tags
 
 
-def _render_plugin(plugin,  context):
-    content_renderer = context.get('cms_content_renderer')
-
-    if content_renderer:
-        content = content_renderer.render_plugin(
+def _render_plugin(plugin, context, renderer=None):
+    if renderer:
+        content = renderer.render_plugin(
             instance=plugin,
             context=context,
             editable=False,
@@ -46,7 +44,6 @@ def get_plugin_index_data(base_plugin, request):
         return text_bits
 
     search_fields = getattr(instance, 'search_fields', [])
-
     if hasattr(instance, 'search_fulltext'):
         # check if the plugin instance has search enabled
         search_contents = instance.search_fulltext
@@ -63,22 +60,21 @@ def get_plugin_index_data(base_plugin, request):
 
     if search_contents:
         context = RequestContext(request)
+        updates = {}
+        engine = Engine.get_default()
 
-        if not DJANGO_1_7:
-            from django.template import Engine
-            # On Django <= 1.7, the RequestContext class would call
-            # all context processors and update the context on initialization.
-            # On Django >= 1.8 the logic to update the context
-            # from context processors is now tied to the bind_template
-            # context manager.
-            updates = {}
-            engine = Engine.get_default()
+        for processor in engine.template_context_processors:
+            updates.update(processor(context.request))
+        context.dicts[context._processors_index] = updates
 
-            for processor in engine.template_context_processors:
-                updates.update(processor(context.request))
-            context.dicts[context._processors_index] = updates
+        try:
+            # django-cms>=3.5
+            renderer = request.toolbar.content_renderer
+        except AttributeError:
+            # django-cms>=3.4
+            renderer = context.get('cms_content_renderer')
 
-        plugin_contents = _render_plugin(instance, context)
+        plugin_contents = _render_plugin(instance, context, renderer)
 
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)
