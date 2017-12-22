@@ -16,6 +16,8 @@ from cms.toolbar.toolbar import CMSToolbar
 from .conf import settings
 from .utils import get_field_value, strip_tags
 
+EXCLUDED_PLUGINS = getattr(settings, 'ALDRYN_SEARCH_EXCLUDED_PLUGINS', [])
+
 
 def _render_plugin(plugin, context, renderer=None):
     if renderer:
@@ -36,13 +38,11 @@ def get_cleaned_bits(data):
 
 
 def get_plugin_index_data(base_plugin, request):
-    excluded_plugins = getattr(settings, 'ALDRYN_SEARCH_PLUGINS_EXCLUDE', [])
     text_bits = []
 
     instance, plugin_type = base_plugin.get_plugin_instance()
 
-    if instance is None or hasattr(instance, '_meta') and hasattr(instance._meta,
-                                                                  'label') and instance._meta.label in excluded_plugins:
+    if instance is None or instance.plugin_type in EXCLUDED_PLUGINS:
         # this is an empty plugin or excluded from search
         return text_bits
 

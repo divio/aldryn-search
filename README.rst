@@ -72,9 +72,8 @@ want to use this app hook, you can either subclass it and register it yourself, 
 
 If you wan't to exclude some cms plugins from indexing, you can specify ``ALDRYN_SEARCH_PLUGINS_EXCLUDE`` setting like so::
 
-    ALDRYN_SEARCH_PLUGINS_EXCLUDE = [
-        "plugin_app1.PluginName1",
-        "plugin_app2.PluginName2",
+    ALDRYN_SEARCH_EXCLUDED_PLUGINS = [
+        "PluginA", "PluginB"
     ]
 
 For pagination, aldryn-search uses ``aldryn_common.paginator.DiggPaginator``. If you want to use this built-in
