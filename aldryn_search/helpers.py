@@ -36,7 +36,7 @@ def get_cleaned_bits(data):
 
 
 def get_plugin_index_data(base_plugin, request):
-    excluded_plugins = getattr(settings, 'ALDRYN_SEARCH_PLUGINS_EXCLUDE')
+    excluded_plugins = getattr(settings, 'ALDRYN_SEARCH_PLUGINS_EXCLUDE', [])
     text_bits = []
 
     instance, plugin_type = base_plugin.get_plugin_instance()
