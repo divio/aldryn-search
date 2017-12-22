@@ -70,6 +70,13 @@ aldryn-search comes with an App Hook for django CMS, and a search view using Dja
 want to use this app hook, you can either subclass it and register it yourself, or set
 ``ALDRYN_SEARCH_REGISTER_APPHOOK`` to ``True``.
 
+If you wan't to exclude some cms plugins from indexing, you can specify ``ALDRYN_SEARCH_PLUGINS_EXCLUDE`` setting like so::
+
+    ALDRYN_SEARCH_PLUGINS_EXCLUDE = [
+        "plugin_app1.PluginName1",
+        "plugin_app2.PluginName2",
+    ]
+
 For pagination, aldryn-search uses ``aldryn_common.paginator.DiggPaginator``. If you want to use this built-in
 pagination, make sure to install`django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
 to ``INSTALLED_APPS``.

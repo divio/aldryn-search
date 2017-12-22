@@ -5,6 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext, Engine
 from django.test import RequestFactory
 from django.utils.text import smart_split
+
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
@@ -35,12 +36,13 @@ def get_cleaned_bits(data):
 
 
 def get_plugin_index_data(base_plugin, request):
+    excluded_plugins = getattr(settings, 'ALDRYN_SEARCH_PLUGINS_EXCLUDE')
     text_bits = []
 
     instance, plugin_type = base_plugin.get_plugin_instance()
 
-    if instance is None:
-        # this is an empty plugin
+    if instance is None or instance._meta.label in excluded_plugins:
+        # this is an empty plugin or excluded from search
         return text_bits
 
     search_fields = getattr(instance, 'search_fields', [])
