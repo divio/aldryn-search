@@ -41,7 +41,8 @@ def get_plugin_index_data(base_plugin, request):
 
     instance, plugin_type = base_plugin.get_plugin_instance()
 
-    if instance is None or instance._meta.label in excluded_plugins:
+    if instance is None or hasattr(instance, '_meta') and hasattr(instance._meta,
+                                                                  'label') and instance._meta.label in excluded_plugins:
         # this is an empty plugin or excluded from search
         return text_bits
 
