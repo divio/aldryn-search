@@ -1,3 +1,8 @@
+==== 0.5.0 (2018-03-06) ====
+
+- Added new ``ALDRYN_SEARCH_EXCLUDED_PLUGINS`` setting to prevent
+  specific plugin types from being indexed.
+
 ==== 0.4.1 (2017-11-02) ====
 
 - Update metadata for pypi
