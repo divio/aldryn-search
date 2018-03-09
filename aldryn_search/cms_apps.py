@@ -10,7 +10,8 @@ from .conf import settings
 
 @apphook_pool.register
 class AldrynSearchApphook(CMSApp):
-    name = _("aldryn search")
+    name = _('aldryn search')
+    app_name = 'aldryn_search'
     
     def get_urls(self, page=None, language=None, **kwargs):
-        return ["aldryn_search.urls"]  
+        return ['aldryn_search.urls']  
