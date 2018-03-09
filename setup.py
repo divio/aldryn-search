@@ -5,9 +5,9 @@ from setuptools import setup, find_packages
 install_requires = [
     'lxml',
     'setuptools',
-    'Django>=1.4',
+    'Django>=1.8',
     'django-appconf',
-    'django-cms>=3.0',
+    'django-cms>=3.5',
     'django-haystack>=2.0.0',
     'django-spurl',
     'django-standard-form',
