@@ -10,6 +10,9 @@ class AldrynSearchApphook(CMSApp):
     name = _("aldryn search")
     urls = ['aldryn_search.urls']
 
+    def get_urls(self, *args, **kwargs):
+        return self.urls
+
 
 if settings.ALDRYN_SEARCH_REGISTER_APPHOOK:
     apphook_pool.register(AldrynSearchApphook)

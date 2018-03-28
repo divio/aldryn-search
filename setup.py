@@ -5,9 +5,9 @@ from setuptools import setup, find_packages
 install_requires = [
     'lxml',
     'setuptools',
-    'Django>=1.4',
+    'Django>=1.8,<2.0',
     'django-appconf',
-    'django-cms>=3.0',
+    'django-cms>=3.2',
     'django-haystack>=2.0.0',
     'django-spurl',
     'django-standard-form',
@@ -35,10 +35,18 @@ setup(
     classifiers = [
         'Development Status :: 4 - Beta',
         'Framework :: Django',
+        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Internet :: WWW/HTTP',
     ]
 )

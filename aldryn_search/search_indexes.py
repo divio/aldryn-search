@@ -26,7 +26,12 @@ class TitleIndex(get_index_base()):
         return obj.page.login_required
 
     def prepare_site_id(self, obj):
-        return obj.page.site_id
+        try:
+            # django-cms>=3.5
+            return obj.page.node.site_id
+        except AttributeError:
+            # django-cms<=3.4
+            return obj.page.site_id
 
     def get_language(self, obj):
         return obj.language
