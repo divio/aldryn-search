@@ -145,11 +145,6 @@ class AldrynIndexBase(AbstractIndex):
         # We set the following fields here because on some models,
         # the value of these fields is dependent on the active language
         # this being the case we extrapolate the language hacks.
-        try:
-            url = self.get_url(obj)
-        except:
-            self.prepared_data = None
-            return        
         self.prepared_data['url'] = self.get_url(obj)
         self.prepared_data['title'] = self.get_title(obj)
         self.prepared_data['description'] = self.get_description(obj)
