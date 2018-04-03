@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from cms.models import CMSPlugin, Title
 
+from .compat import GTE_CMS_35
 from .conf import settings
 from .helpers import get_plugin_index_data
 from .utils import clean_join, get_index_base, strip_tags
@@ -26,12 +27,9 @@ class TitleIndex(get_index_base()):
         return obj.page.login_required
 
     def prepare_site_id(self, obj):
-        try:
-            # django-cms>=3.5
-            return obj.page.node.site_id
-        except AttributeError:
-            # django-cms<=3.4
+        if not GTE_CMS_35:
             return obj.page.site_id
+        return obj.page.node.site_id
 
     def get_language(self, obj):
         return obj.language
@@ -145,8 +143,10 @@ class TitleIndex(get_index_base()):
             Q(page__publication_end_date__gte=timezone.now()) | Q(page__publication_end_date__isnull=True),
             Q(redirect__exact='') | Q(redirect__isnull=True),
             language=language
-        ).select_related('page').distinct()
-        return queryset
+        ).select_related('page')
+        if GTE_CMS_35:
+            queryset = queryset.select_related('page__node')
+        return queryset.distinct()
 
     def should_update(self, instance, **kwargs):
         # We use the action flag to prevent
