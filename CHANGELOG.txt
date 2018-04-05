@@ -1,3 +1,9 @@
+==== 1.0.0 (unreleased) ====
+
+- Added django CMS 3.5 to test matrix
+- Dropped support for Django < 1.8
+- Dropped suppport for django CMS < 3.2
+
 ==== 0.5.0 (2018-03-06) ====
 
 - Added new ``ALDRYN_SEARCH_EXCLUDED_PLUGINS`` setting to prevent
