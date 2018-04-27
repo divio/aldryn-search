@@ -3,7 +3,7 @@ from cms.models import CMSPlugin, Title
 from cms.models.placeholdermodel import Placeholder
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from django.template import Template
+from django.template import engines
 from django.test import TestCase
 from haystack import connections
 from haystack.constants import DEFAULT_ALIAS
@@ -12,6 +12,12 @@ from haystack.query import SearchQuerySet
 from aldryn_search.search_indexes import TitleIndex
 
 from .helpers import get_plugin_index_data, get_request
+
+
+def template_from_string(value):
+    """Create an engine-specific template based on provided string.
+    """
+    return engines.all()[0].from_string(value)
 
 
 class FakeTemplateLoader(object):
@@ -28,7 +34,7 @@ class FakeTemplateLoader(object):
 class NotIndexedPlugin(CMSPluginBase):
     model = CMSPlugin
     plugin_content = 'rendered plugin content'
-    render_template = Template(plugin_content)
+    render_template = template_from_string(plugin_content)
 
     def render(self, context, instance, placeholder):
         return context
@@ -39,7 +45,7 @@ plugin_pool.register_plugin(NotIndexedPlugin)
 class HiddenPlugin(CMSPluginBase):
     model = CMSPlugin
     plugin_content = 'never search for this content'
-    render_template = Template(plugin_content)
+    render_template = template_from_string(plugin_content)
 
     def render(self, context, instance, placeholder):
         return context
