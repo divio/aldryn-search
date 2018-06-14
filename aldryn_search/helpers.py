@@ -14,9 +14,18 @@ except ImportError:
 from cms.toolbar.toolbar import CMSToolbar
 
 from .conf import settings
-from .utils import get_field_value, strip_tags
+from .utils import (
+    _get_alias_from_language_func,
+    _get_language_from_alias_func,
+    get_field_value,
+    strip_tags,
+)
 
 EXCLUDED_PLUGINS = getattr(settings, 'ALDRYN_SEARCH_EXCLUDED_PLUGINS', [])
+
+
+get_alias_from_language = _get_alias_from_language_func()
+get_language_from_alias = _get_language_from_alias_func()
 
 
 def _render_plugin(plugin, context, renderer=None):

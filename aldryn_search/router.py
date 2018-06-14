@@ -5,14 +5,14 @@ from django.utils.translation import get_language
 from haystack import routers
 from haystack.constants import DEFAULT_ALIAS
 
-from .utils import alias_from_language
+from .helpers import get_alias_from_language
 
 
 class LanguageRouter(routers.BaseRouter):
 
     def for_read(self, **hints):
         language = get_language()
-        alias = alias_from_language(language)
+        alias = get_alias_from_language(language)
 
         if alias not in settings.HAYSTACK_CONNECTIONS:
             return DEFAULT_ALIAS
@@ -20,7 +20,7 @@ class LanguageRouter(routers.BaseRouter):
 
     def for_write(self, **hints):
         language = get_language()
-        alias = alias_from_language(language)
+        alias = get_alias_from_language(language)
 
         if alias not in settings.HAYSTACK_CONNECTIONS:
             return DEFAULT_ALIAS
