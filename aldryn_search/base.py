@@ -21,7 +21,7 @@ class AbstractIndex(indexes.SearchIndex):
         """
         try:
             self._backend = super(AbstractIndex, self).get_backend(using)
-        except:
+        except AttributeError:
             self._backend = super(AbstractIndex, self)._get_backend(using)
             
         self._backend_alias = using
