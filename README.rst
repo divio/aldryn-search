@@ -77,7 +77,7 @@ If you want to exclude some cms plugins from indexing, you can specify ``ALDRYN_
     ]
 
 For pagination, aldryn-search uses ``aldryn_common.paginator.DiggPaginator``. If you want to use this built-in
-pagination, make sure to install`django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
+pagination, make sure to install `django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
 to ``INSTALLED_APPS``.
 
 Pagination
