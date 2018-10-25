@@ -59,7 +59,7 @@ By default this setting evaluates to a function that checks if the alias is in `
 uses the alias as a language.
 
 
-For a complete Haystack setup, please refer to their `documentation <http://docs.haystacksearch.org/dev/>`_.
+For a complete Haystack setup, please refer to their `documentation <https://django-haystack.readthedocs.io/>`_.
 
 For more documentation, see the `docs folder <https://github.com/aldryn/aldryn-search/tree/master/docs/>`_.
 
