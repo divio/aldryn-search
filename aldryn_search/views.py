@@ -2,7 +2,6 @@
 from django.utils.translation import get_language_from_request
 from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
-from django.contrib.sites.models import Site
 
 from haystack.forms import ModelSearchForm
 from haystack.query import SearchQuerySet
@@ -68,8 +67,6 @@ class AldrynSearchView(FormMixin, ListView):
         # url__in=['', None] make the query exclude "" and "None".
         # isnull=True, using Raw and other filters not works too
         # queryset = queryset.exclude(url__in=['', None])
-        current_site = Site.objects.get_current().id
-        queryset = queryset.exclude(url__in=['', None]).filter(site_id=current_site)
         return queryset
 
     def get_search_queryset(self):
