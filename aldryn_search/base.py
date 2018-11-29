@@ -19,9 +19,9 @@ class AbstractIndex(indexes.SearchIndex):
         """
         We set the backend to allow easy access for things like document search.
         """
-        if hasattr(super(AbstractIndex, self), 'get_backend'):
+        try:
             self._backend = super(AbstractIndex, self).get_backend(using)
-        else:
+        except AttributeError:
             self._backend = super(AbstractIndex, self)._get_backend(using)
 
         self._backend_alias = using
