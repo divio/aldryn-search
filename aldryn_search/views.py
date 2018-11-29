@@ -9,7 +9,8 @@ from haystack.query import SearchQuerySet
 from aldryn_common.paginator import DiggPaginator
 
 from .conf import settings
-from .utils import alias_from_language, get_model_path
+from .helpers import get_alias_from_language
+from .utils import get_model_path
 
 
 class AldrynSearchView(FormMixin, ListView):
@@ -72,7 +73,7 @@ class AldrynSearchView(FormMixin, ListView):
     def get_search_queryset(self):
         if self.search_queryset is None:
             language = get_language_from_request(self.request, check_path=True)
-            connection_alias = alias_from_language(language)
+            connection_alias = get_alias_from_language(language)
             return self.search_queryset_class(using=connection_alias)
         return self.search_queryset
 

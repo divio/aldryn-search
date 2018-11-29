@@ -5,11 +5,8 @@ from django.utils.translation import override
 from haystack import indexes
 
 from .conf import settings
-from .helpers import get_request
-from .utils import clean_join, _get_language_from_alias_func
-
-
-language_from_alias = _get_language_from_alias_func()
+from .helpers import get_language_from_alias, get_request
+from .utils import clean_join
 
 
 class AbstractIndex(indexes.SearchIndex):
@@ -80,8 +77,8 @@ class AbstractIndex(indexes.SearchIndex):
         """
         language = None
 
-        if using and language_from_alias:
-            language = language_from_alias(using)
+        if using:
+            language = get_language_from_alias(using)
         return language or settings.ALDRYN_SEARCH_DEFAULT_LANGUAGE
 
     def get_index_kwargs(self, language):
