@@ -112,13 +112,6 @@ class AldrynIndexBase(AbstractIndex):
     title = indexes.CharField(stored=True, indexed=False)
     site_id = indexes.IntegerField(stored=True, indexed=True, null=True)
 
-    def __init__(self):
-        if hasattr(self, 'INDEX_TITLE'):
-            warning_message = ('AldrynIndexBase.INDEX_TITLE is deprecated; '
-                               'use AldrynIndexBase.index_title instead')
-            warnings.warn(warning_message, PendingDeprecationWarning)
-        super(AldrynIndexBase, self).__init__()
-
     def get_url(self, obj):
         """
         Equivalent to self.prepare_url.
@@ -146,7 +139,7 @@ class AldrynIndexBase(AbstractIndex):
         self.prepared_data['title'] = self.get_title(obj)
         self.prepared_data['description'] = self.get_description(obj)
 
-        if self.index_title or getattr(self, 'INDEX_TITLE', False):
+        if self.index_title:
             prepared_text = self.prepared_data['text']
             prepared_title = self.prepared_data['title']
             self.prepared_data['text'] = clean_join(
