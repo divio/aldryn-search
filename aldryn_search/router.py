@@ -19,7 +19,18 @@ class LanguageRouter(routers.BaseRouter):
         return alias
 
     def for_write(self, **hints):
-        language = get_language()
+        language = None
+        try:
+            # Use this for Aldryn Events/FAQ etc
+            #   as 'get_language()' can fail to get the instance language.
+            if hints and 'instance' in hints:
+                if hasattr(hints['instance'],'language_code'):
+                    language = hints['instance'].language_code
+        except:
+            pass
+
+        if not language:
+            language = get_language()
         alias = get_alias_from_language(language)
 
         if alias not in settings.HAYSTACK_CONNECTIONS:
