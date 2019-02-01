@@ -59,7 +59,7 @@ By default this setting evaluates to a function that checks if the alias is in `
 uses the alias as a language.
 
 
-For a complete Haystack setup, please refer to their `documentation <http://docs.haystacksearch.org/dev/>`_.
+For a complete Haystack setup, please refer to their `documentation <https://django-haystack.readthedocs.io/>`_.
 
 For more documentation, see the `docs folder <https://github.com/aldryn/aldryn-search/tree/master/docs/>`_.
 
@@ -77,7 +77,7 @@ If you want to exclude some cms plugins from indexing, you can specify ``ALDRYN_
     ]
 
 For pagination, aldryn-search uses ``aldryn_common.paginator.DiggPaginator``. If you want to use this built-in
-pagination, make sure to install`django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
+pagination, make sure to install `django-spurl <https://github.com/j4mie/django-spurl>`_, and add then add ``spurl``
 to ``INSTALLED_APPS``.
 
 Pagination
