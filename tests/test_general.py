@@ -1,17 +1,18 @@
-from cms.api import create_page, add_plugin
+from django.template import engines
+from django.test import TestCase
+
+from cms.api import add_plugin, create_page
 from cms.models import CMSPlugin, Title
 from cms.models.placeholdermodel import Placeholder
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from django.template import engines
-from django.test import TestCase
+
 from haystack import connections
 from haystack.constants import DEFAULT_ALIAS
-from haystack.query import SearchQuerySet
-
-from aldryn_search.search_indexes import TitleIndex
+from haystack.query import SearchQuerySet  # noqa
 
 from aldryn_search.helpers import get_request
+from aldryn_search.search_indexes import TitleIndex
 
 
 def template_from_string(value):
@@ -39,6 +40,7 @@ class NotIndexedPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         return context
 
+
 plugin_pool.register_plugin(NotIndexedPlugin)
 
 
@@ -49,6 +51,7 @@ class HiddenPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         return context
+
 
 plugin_pool.register_plugin(HiddenPlugin)
 
@@ -126,8 +129,8 @@ class PluginFilterIndexingTests(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_filter_option(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page", reverse_id='testpage', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -138,8 +141,8 @@ class PluginFilterIndexingTests(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_filter_option(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page", reverse_id='testpage', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -153,8 +156,8 @@ class PluginExcludeAndFilterIndexingTests2(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option2(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page2", reverse_id='testpage2', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -165,8 +168,8 @@ class PluginExcludeAndFilterIndexingTests2(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option2(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page2", reverse_id='testpage2', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -180,8 +183,8 @@ class PluginExcludeAndFilterIndexingTests3(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option3(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page3", reverse_id='testpage3', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -192,8 +195,8 @@ class PluginExcludeAndFilterIndexingTests3(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option3(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page3", reverse_id='testpage3', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -207,8 +210,8 @@ class PluginExcludeAndFilterIndexingTests4(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option4(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page4", reverse_id='testpage4', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -219,8 +222,8 @@ class PluginExcludeAndFilterIndexingTests4(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option4(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page4", reverse_id='testpage4', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -234,8 +237,8 @@ class PluginExcludeAndFilterIndexingTests5(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option5(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page5", reverse_id='testpage5', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -246,8 +249,8 @@ class PluginExcludeAndFilterIndexingTests5(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option5(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page5", reverse_id='testpage5', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -261,8 +264,8 @@ class PluginExcludeAndFilterIndexingTests6(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option6(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page6", reverse_id='testpage6', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -273,8 +276,8 @@ class PluginExcludeAndFilterIndexingTests6(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option6(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page6", reverse_id='testpage6', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -288,8 +291,8 @@ class PluginExcludeAndFilterIndexingTests7(BaseTestCase):
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option7(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page7", reverse_id='testpage7', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -300,8 +303,8 @@ class PluginExcludeAndFilterIndexingTests7(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option7(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page7", reverse_id='testpage7', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
@@ -309,13 +312,14 @@ class PluginExcludeAndFilterIndexingTests7(BaseTestCase):
         self.assertEqual('test_page7', indexed['title'])
         self.assertEqual('test_page7 never search for this content', indexed['text'])
 
+
 class PluginExcludeAndFilterIndexingTests8(BaseTestCase):
 
     def test_page_title_is_indexed_using_prepare_with_excluding_filter_option8(self):
         """This tests the indexing path way used by update_index mgmt command"""
         page = create_page(title="test_page8", reverse_id='testpage8', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.index_queryset(DEFAULT_ALIAS)  # initialises index._backend_alias
@@ -326,8 +330,8 @@ class PluginExcludeAndFilterIndexingTests8(BaseTestCase):
     def test_page_title_is_indexed_using_update_object_with_excluding_filter_option8(self):
         """This tests the indexing path way used by the RealTimeSignalProcessor"""
         page = create_page(title="test_page8", reverse_id='testpage8', template="test.html", language="en")
-        plugin = add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
-        plugin2 = add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='content'), NotIndexedPlugin, 'en')
+        add_plugin(page.placeholders.get(slot='hidden_content'), HiddenPlugin, 'en')
         index = self.get_title_index()
         title = Title.objects.get(pk=page.title_set.all()[0].pk)
         index.update_object(title, using=DEFAULT_ALIAS)
