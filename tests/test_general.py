@@ -11,7 +11,7 @@ from haystack.query import SearchQuerySet
 
 from aldryn_search.search_indexes import TitleIndex
 
-from .helpers import get_plugin_index_data, get_request
+from aldryn_search.helpers import get_request
 
 
 def template_from_string(value):
