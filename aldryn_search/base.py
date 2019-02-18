@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import warnings
 from django.utils.translation import override
 
 from haystack import indexes

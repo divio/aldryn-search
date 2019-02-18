@@ -24,9 +24,9 @@ class LanguageRouter(routers.BaseRouter):
             # Use this for Aldryn Events/FAQ etc
             #   as 'get_language()' can fail to get the instance language.
             if hints and 'instance' in hints:
-                if hasattr(hints['instance'],'language_code'):
+                if hasattr(hints['instance'], 'language_code'):
                     language = hints['instance'].language_code
-        except:
+        except Exception:
             pass
 
         if not language:
