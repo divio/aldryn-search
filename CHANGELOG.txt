@@ -6,6 +6,9 @@ Changelog
 1.1.0 (unreleased)
 ==================
 
+* Added isort and flake8
+* Extended test matrix
+* Adapted code base to align with other supported addons
 * Removed ``INDEX_TITLE`` backwards compatibility shim
 
 

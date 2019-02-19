@@ -60,17 +60,13 @@ matrix:
     - python: 3.7
       env: DJANGO='dj22' CMS='cms36'
 
-cache:
-  directories:
-    - $HOME/.wheelhouse
-
 install:
-  - pip install coverage isort tox
+  - pip install coverage tox
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY_VER=py27; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PY_VER=py34; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PY_VER=py35; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then export PY_VER=py36; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then export PY_VER=py36; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then export PY_VER=py37; fi"
   - "if [[ ${DJANGO}z != 'z' ]]; then export TOX_ENV=$PY_VER-$DJANGO-$CMS; fi"
 
 script:
