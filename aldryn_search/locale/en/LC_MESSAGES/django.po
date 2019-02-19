@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-24 16:57+0200\n"
+"POT-Creation-Date: 2019-02-19 11:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,31 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cms_app.py:13
 msgid "aldryn search"
 msgstr ""
 
-#: templates/aldryn_search/search_results.html:6
-msgid "enter your search term"
-msgstr ""
-
-#: templates/aldryn_search/search_results.html:16
-msgid "results"
-msgstr ""
-
-#: templates/aldryn_search/includes/pagination.html:7
 #, python-format
 msgid "%(from)s – %(until)s of %(count)s %(obj_string)s are displayed"
 msgstr ""
 
-#: templates/aldryn_search/includes/pagination.html:11
 msgid "previous"
 msgstr ""
 
-#: templates/aldryn_search/includes/pagination.html:25
 msgid "next"
 msgstr ""
 
-#: templates/aldryn_search/includes/search_items.html:12
 msgid "No results found for"
+msgstr ""
+
+msgid "enter your search term"
+msgstr ""
+
+msgid "results"
 msgstr ""

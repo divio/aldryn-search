@@ -6,6 +6,7 @@ Changelog
 1.1.0 (unreleased)
 ==================
 
+* Added support for Transifex
 * Added isort and flake8
 * Extended test matrix
 * Adapted code base to align with other supported addons
