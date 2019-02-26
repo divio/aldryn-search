@@ -2,3 +2,4 @@ coverage
 pysolr
 djangocms-admin-style
 django-appconf
+djangocms-helper>=1.1.0

@@ -1,57 +1,37 @@
 language: python
 
-# Use container based infrastructure
 sudo: false
 
-env:
-  - TOXENV=flake8
-
-  - TOXENV=py35-dj111-cms35
-  - TOXENV=py35-dj111-cms34
-  - TOXENV=py34-dj111-cms35
-  - TOXENV=py34-dj111-cms34
-  - TOXENV=py27-dj111-cms35
-  - TOXENV=py27-dj111-cms34
-
-  - TOXENV=py35-dj110-cms35
-  - TOXENV=py35-dj110-cms34
-  - TOXENV=py34-dj110-cms35
-  - TOXENV=py34-dj110-cms34
-  - TOXENV=py27-dj110-cms35
-  - TOXENV=py27-dj110-cms34
-
-  - TOXENV=py35-dj19-cms34
-  - TOXENV=py35-dj19-cms33
-  - TOXENV=py35-dj19-cms32
-  - TOXENV=py34-dj19-cms34
-  - TOXENV=py34-dj19-cms33
-  - TOXENV=py34-dj19-cms32
-  - TOXENV=py27-dj19-cms34
-  - TOXENV=py27-dj19-cms33
-  - TOXENV=py27-dj19-cms32
-
-  - TOXENV=py35-dj18-cms34
-  - TOXENV=py35-dj18-cms33
-  - TOXENV=py35-dj18-cms32
-  - TOXENV=py34-dj18-cms34
-  - TOXENV=py34-dj18-cms33
-  - TOXENV=py34-dj18-cms32
-  - TOXENV=py27-dj18-cms34
-  - TOXENV=py27-dj18-cms33
-  - TOXENV=py27-dj18-cms32
-
-cache:
-  directories:
-    - $HOME/.wheelhouse
+matrix:
+  include:
+    - python: 3.5
+      env: TOX_ENV='flake8'
+    - python: 3.5
+      env: TOX_ENV='isort'
+      # Django 1.11
+    - python: 2.7
+      env: DJANGO='dj111' CMS='cms34'
+    - python: 3.4
+      env: DJANGO='dj111' CMS='cms35'
+    - python: 3.5
+      env: DJANGO='dj111' CMS='cms36'
+    # Django 2.0
+    - python: 3.5
+      env: DJANGO='dj20' CMS='cms36'
+    # Django 2.1
+    - python: 3.6
+      env: DJANGO='dj21' CMS='cms36'
 
 install:
-  - pip install tox coveralls
+  - pip install coverage tox
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY_VER=py27; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PY_VER=py34; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PY_VER=py35; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then export PY_VER=py36; fi"
+  - "if [[ ${DJANGO}z != 'z' ]]; then export TOX_ENV=$PY_VER-$DJANGO-$CMS; fi"
 
 script:
-  - tox -e $TOXENV
+  - tox -e $TOX_ENV
 
 after_success:
-  - coveralls
-
-notifications:
-  webhooks: http://addons.us-iad-rs.aldryn.io/en/travis-endpoint/
+  - bash <(curl -s https://codecov.io/bash)

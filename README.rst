@@ -1,8 +1,20 @@
-=================
-aldryn-search
-=================
+=============
+Aldryn Search
+=============
 
 This package provides a search indexes for easy Haystack 2 integration with django CMS.
+
+Contributing
+============
+
+This is a an open-source project. We'll be delighted to receive your
+feedback in the form of issues and pull requests. Before submitting your
+pull request, please review our `contribution guidelines
+<http://docs.django-cms.org/en/latest/contributing/index.html>`_.
+
+We're grateful to all contributors who have helped create and maintain this package.
+Contributors are listed at the `contributors <https://github.com/divio/aldryn-search/graphs/contributors>`_
+section.
 
 Usage
 =====
@@ -61,7 +73,7 @@ uses the alias as a language.
 
 For a complete Haystack setup, please refer to their `documentation <https://django-haystack.readthedocs.io/>`_.
 
-For more documentation, see the `docs folder <https://github.com/aldryn/aldryn-search/tree/master/docs/>`_.
+For more documentation, see the `docs folder <https://github.com/divio/aldryn-search/tree/master/docs/>`_.
 
 Integration with django CMS
 ===========================

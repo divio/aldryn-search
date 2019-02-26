@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Created on Dec 1, 2015
 
 @author: jakob
-'''
+"""
 import copy
 
 from haystack.exceptions import NotHandled
-from haystack.signals import (
+from haystack.signals import \
     RealtimeSignalProcessor as BaseRealtimeSignalProcessor
-)
+
 from .signals import add_to_index, remove_from_index
 
 

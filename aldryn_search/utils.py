@@ -3,20 +3,18 @@ from __future__ import unicode_literals
 
 import importlib
 import re
-import six
-
-from lxml.html.clean import Cleaner as LxmlCleaner
-from lxml.etree import ParseError, ParserError
-
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.encoding import force_text
 
+from cms.utils.i18n import get_language_code
+
+import six
 from haystack import DEFAULT_ALIAS
 from haystack.indexes import SearchIndex
-
-from cms.utils.i18n import get_language_code
+from lxml.etree import ParseError, ParserError
+from lxml.html.clean import Cleaner as LxmlCleaner
 
 from .conf import settings
 
