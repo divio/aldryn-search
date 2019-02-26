@@ -11,63 +11,11 @@
 .pydevproject/
 .settings/
 .tox/
-
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-.static_storage/
-.media/
-local_settings.py
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# PyCharm
-.idea
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# PyCharm
-.idea
-
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
 __pycache__/
 build/
 dist/
 env/
+docs/_build/
 
 /~
 /node_modules

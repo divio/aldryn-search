@@ -8,7 +8,7 @@ REQUIREMENTS = [
     'lxml',
     'setuptools',
     'django-appconf',
-    'django-cms>=3.5',
+    'django-cms>=3.4.5',
     'django-haystack>=2.0.0',
     'django-spurl',
     'django-standard-form',
