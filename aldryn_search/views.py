@@ -61,7 +61,7 @@ class AldrynSearchView(FormMixin, ListView):
 
     def get_queryset(self):
         queryset = self.form.search()
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             queryset = queryset.exclude(login_required=True)
         # TODO: fix that url filter.
         # url__in=['', None] make the query exclude "" and "None".
