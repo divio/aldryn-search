@@ -2,4 +2,7 @@ coverage
 pysolr
 djangocms-admin-style
 django-appconf
-djangocms-helper>=1.1.0
+django-app-helper>=1.1.0
+six
+isort
+flake8

@@ -3,11 +3,13 @@ Changelog
 =========
 
 
-1.1.0 (unreleased)
+1.1.0 (2020-02-20)
 ==================
 
+* Added support for Django 2.2 and django CMS 3.7
 * Added support for Transifex
 * Added isort and flake8
+* Changed from djangocms-helper to django-app-helper
 * Extended test matrix
 * Adapted code base to align with other supported addons
 * Removed ``INDEX_TITLE`` backwards compatibility shim
