@@ -21,6 +21,9 @@ matrix:
     # Django 2.1
     - python: 3.6
       env: DJANGO='dj21' CMS='cms36'
+    # Django 2.2
+    - python: 3.6
+      env: DJANGO='dj22' CMS='cms37'
 
 install:
   - pip install coverage tox
