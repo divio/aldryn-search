@@ -3,13 +3,13 @@ from django.utils.translation import get_language_from_request
 from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
 
-from aldryn_common.paginator import DiggPaginator
 from haystack.forms import ModelSearchForm
 from haystack.query import SearchQuerySet
 
 from .compat import is_authenticated
 from .conf import settings
 from .helpers import get_alias_from_language
+from .paginators import DiggPaginator
 from .utils import get_model_path
 
 
@@ -30,19 +30,19 @@ class AldrynSearchView(FormMixin, ListView):
     # SearchQueryset class to instantiate if no search_queryset instance is defined.
     search_queryset_class = SearchQuerySet
 
-    template_name = 'aldryn_search/search_results.html'
+    template_name = "aldryn_search/search_results.html"
 
     def get_form_kwargs(self):
         kwargs = super(AldrynSearchView, self).get_form_kwargs()
-        kwargs['load_all'] = self.load_all
-        kwargs['searchqueryset'] = self.get_search_queryset()
+        kwargs["load_all"] = self.load_all
+        kwargs["searchqueryset"] = self.get_search_queryset()
 
         data = self.request.GET
 
         if self.models:
             data = data.copy()
-            data.setlist('models', (get_model_path(model) for model in self.models))
-        kwargs['data'] = data
+            data.setlist("models", (get_model_path(model) for model in self.models))
+        kwargs["data"] = data
         return kwargs
 
     def get_query(self, form):
@@ -52,8 +52,8 @@ class AldrynSearchView(FormMixin, ListView):
         Returns an empty string if the query is invalid.
         """
         if form.is_valid():
-            return form.cleaned_data['q']
-        return ''
+            return form.cleaned_data["q"]
+        return ""
 
     def get(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -79,8 +79,8 @@ class AldrynSearchView(FormMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AldrynSearchView, self).get_context_data(**kwargs)
-        context['query'] = self.get_query(self.form)
-        context['form'] = self.form
+        context["query"] = self.get_query(self.form)
+        context["form"] = self.form
         if self.object_list.query.backend.include_spelling:
-            context['suggestion'] = self.form.get_suggestion()
+            context["suggestion"] = self.form.get_suggestion()
         return context
