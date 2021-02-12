@@ -27,7 +27,6 @@ Edit ``settings.py``
 In your project's ``settings.py`` make sure you have all of::
 
     'haystack',
-    'aldryn_common',
     'aldryn_search',
     'standard_form',
     'spurl',

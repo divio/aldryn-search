@@ -2,7 +2,6 @@
     "package-name": "aldryn-search",
     "installed-apps": [
         "haystack",
-        "aldryn_common",
         "aldryn_search",
         "standard_form",
         "spurl"
